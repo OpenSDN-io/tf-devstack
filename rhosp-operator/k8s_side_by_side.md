@@ -20,7 +20,7 @@ Red Hat account is needed for setting RHEL subscription.
 
     # Download tf-devstack
     sudo yum install -y git
-    git clone http://github.com/tungstenfabric/tf-devstack
+    git clone http://github.com/opensdn-io/tf-devstack
     ```
 
 - Ensure CentOS base image for K8S is prepared (to be run first time for kvm)

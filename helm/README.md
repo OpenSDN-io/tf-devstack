@@ -18,7 +18,7 @@ Clone and run the run.sh script for Helm after setting orchestrator to kubernete
 
 ``` bash
 sudo yum install -y git
-git clone http://github.com/tungstenfabric/tf-devstack
+git clone http://github.com/opensdn-io/tf-devstack
 tf-devstack/helm/run.sh
 ```
 
@@ -31,7 +31,7 @@ Clone and run the run.sh script for Helm
 ``` bash
 sudo yum install -y git
 export ORCHESTRATOR=openstack
-git clone http://github.com/tungstenfabric/tf-devstack
+git clone http://github.com/opensdn-io/tf-devstack
 tf-devstack/helm/run.sh
 ```
 
@@ -59,7 +59,7 @@ Individual stages:
 
 Environment variable list:
 
-- CONTAINER_REGISTRY - by default "tungstenfabric"
+- CONTAINER_REGISTRY - by default "opensdn"
 - CONTRAIL_CONTAINER_TAG - by default "master-latest"
 - CONTRAIL_DEPLOYER_CONTAINER_TAG - by default equal to CONTRAIL_CONTAINER_TAG
 - ORCHESTRATOR - orchestrator for deployment, "kubernetes" (default) and "openstack" are supported

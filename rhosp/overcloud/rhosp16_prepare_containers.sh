@@ -10,7 +10,7 @@ sudo openstack tripleo container image prepare $rhel_reg_env_files \
 echo 'sudo openstack overcloud container image upload --config-file ./overcloud_containers.yaml'
 sudo openstack overcloud container image upload --config-file ./overcloud_containers.yaml
 
-registry=${CONTAINER_REGISTRY:-'docker.io/tungstenfabric'}
+registry=${CONTAINER_REGISTRY:-'docker.io/opensdn'}
 tag=${CONTRAIL_CONTAINER_TAG:-'latest'}
 
 ./contrail-tripleo-heat-templates/tools/contrail/import_contrail_container.sh \

@@ -36,7 +36,7 @@ fi
 DEV_ENV=${DEV_ENV:-false}
 
 # defaults for stack deployment
-# If not set will be default 'tungstenfabric'
+# If not set will be default 'opensdn'
 export CONTAINER_REGISTRY=${CONTAINER_REGISTRY:-}
 export DEPLOYER_CONTAINER_REGISTRY=${DEPLOYER_CONTAINER_REGISTRY:-$CONTAINER_REGISTRY}
 # If not set will be default 'latest'

@@ -12,7 +12,7 @@ echo
 echo [get tf-dev-env]
 echo cleanup old if exists
 [ -d ./tf-dev-env ] && rm -rf ./tf-dev-env
-git clone --depth 1 --single-branch https://github.com/tungstenfabric/tf-dev-env.git
+git clone --depth 1 --single-branch https://github.com/opensdn-io/tf-dev-env.git
 
 # build all
 echo

@@ -23,7 +23,7 @@ There are 2 providers for deployment:
 
 1. Install openstack CLI and setup authorization for OpenStack cloud.
 1. Check that you have jq installed.
-1. git clone <https://github.com/tungstenfabric/tf-devstack.git>
+1. git clone <https://github.com/opensdn-io/tf-devstack.git>
 1. cd tf-devstack/rhosp
 1. ./providers/openstack/create_env.sh it will create VMs and environment file rhosp-environment.sh
 1. Copy directory tf-devstack and file rhosp-environment.sh to undercloud node
@@ -61,7 +61,7 @@ DEPLOY_POSTFIX_INC equals DEPLOY_POSTFIX_INC + 1.
 
 1. Setup KVM host
 1. Login to KVM host
-1. git clone <https://github.com/tungstenfabric/tf-devstack.git>
+1. git clone <https://github.com/opensdn-io/tf-devstack.git>
 1. cd tf-devstack/rhosp
 1. edit file config/env_kvm.sh (set correct ssh keys, BASE_IMAGE, etc)
 1. export PROVIDER=kvm

@@ -54,7 +54,7 @@ sudo yum install -y git
 3. Clone this repository and run the startup script:
 
 ``` bash
-git clone http://github.com/tungstenfabric/tf-devstack
+git clone http://github.com/opensdn-io/tf-devstack
 ./tf-devstack/ansible/run.sh
 ```
 
@@ -94,8 +94,8 @@ Individual stages:
 ## Details
 
 To deploy Tungsten Fabric from published containers
-[tf-container-deployer playbooks](https://github.com/tungstenfabric/tf-ansible-deployer) is used. For building step
-[tf-dev-env environment](https://github.com/tungstenfabric/tf-dev-env) is used.
+[tf-container-deployer playbooks](https://github.com/opensdn-io/tf-ansible-deployer) is used. For building step
+[tf-dev-env environment](https://github.com/opensdn-io/tf-dev-env) is used.
 
 Preparation script allows root user to connect to host via ssh, install and configure docker,
 build tf-dev-control container.
@@ -105,7 +105,7 @@ Environment variable list:
 - ORCHESTRATOR kubernetes by default or openstack
 - OPENSTACK_VERSION train/stein/ussuri, variable is used when ORCHESTRATOR=openstack
 - NODE_IP a IP address used as CONTROLLER_NODES and CONTROL_NODES
-- CONTAINER_REGISTRY - by default "tungstenfabric"
+- CONTAINER_REGISTRY - by default "opensdn"
 - CONTRAIL_CONTAINER_TAG - by default "latest"
 - CONTRAIL_DEPLOYER_CONTAINER_TAG - by default equal to CONTRAIL_CONTAINER_TAG
 - K8S_YUM_REPO_URL - https://packages.cloud.google.com/yum/repos/kubernetes-el7-x86_64 by default

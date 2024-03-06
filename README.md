@@ -7,11 +7,11 @@ allows bringing up Tungsten Fabric along with Kubernetes of OpenStack cloud on a
 
 Possible deployment methods are:
 
-- [k8s manifests](https://github.com/tungstenfabric/tf-devstack/tree/master/k8s_manifests)
-- [ansible](https://github.com/tungstenfabric/tf-devstack/tree/master/ansible)
-- [helm](https://github.com/tungstenfabric/tf-devstack/tree/master/helm)
-- [juju](https://github.com/tungstenfabric/tf-devstack/tree/master/juju)
-- [rhosp](https://github.com/tungstenfabric/tf-devstack/tree/master/rhosp)
+- [k8s manifests](https://github.com/opensdn-io/tf-devstack/tree/master/k8s_manifests)
+- [ansible](https://github.com/opensdn-io/tf-devstack/tree/master/ansible)
+- [helm](https://github.com/opensdn-io/tf-devstack/tree/master/helm)
+- [juju](https://github.com/opensdn-io/tf-devstack/tree/master/juju)
+- [rhosp](https://github.com/opensdn-io/tf-devstack/tree/master/rhosp)
 
 Please see particular deployment method readmes for details.
 
@@ -21,9 +21,9 @@ IMPORTANT: some of the parts and pieces are still under construction
 
 Full TF dev suite consists of:
 
-- [tf-dev-env](https://github.com/tungstenfabric/tf-dev-env) - develop and build TF
-- [tf-devstack](https://github.com/tungstenfabric/tf-devstack) - deploy TF
-- [tf-dev-test](https://github.com/tungstenfabric/tf-dev-test) - test deployed TF
+- [tf-dev-env](https://github.com/opensdn-io/tf-dev-env) - develop and build TF
+- [tf-devstack](https://github.com/opensdn-io/tf-devstack) - deploy TF
+- [tf-dev-test](https://github.com/opensdn-io/tf-dev-test) - test deployed TF
 
 Each of these tools can be used separately or in conjunction with the other two. They are supposed to be invoked in the sequence they were listed and produce environment (conf files and variables) seamlessly consumable by the next tool.
 
@@ -58,7 +58,7 @@ sudo yum install -y git
 Clone tf-dev-env:
 
 ``` bash
-git clone http://github.com/tungstenfabric/tf-dev-env
+git clone http://github.com/opensdn-io/tf-dev-env
 ```
 
 Prepare the build container and fetch TF sources:
@@ -71,7 +71,7 @@ Make required changes in sources fetched to contrail directory. For example, fet
 
 ``` bash
 cd contrail/controller
-git fetch "https://gerrit.tungsten.io/tungstenfabric/tf-controller" refs/changes/..... && git checkout FETCH_HEAD
+git fetch "https://gerrit.tungsten.io/opensdn-io/tf-controller" refs/changes/..... && git checkout FETCH_HEAD
 cd ../../
 ```
 
@@ -86,7 +86,7 @@ tf-dev-env/run.sh build
 Clone tf-devstack:
 
 ``` bash
-git clone http://github.com/tungstenfabric/tf-devstack
+git clone http://github.com/opensdn-io/tf-devstack
 ```
 
 Deploy TF by means of k8s manifests, for example:
@@ -120,7 +120,7 @@ tf-devstack/k8s_manifests/cleanup.sh tf
 Clone tf-dev-test:
 
 ``` bash
-git clone http://github.com/tungstenfabric/tf-dev-test
+git clone http://github.com/opensdn-io/tf-dev-test
 ```
 
 Test the deployment by smoke tests, for example:
@@ -151,7 +151,7 @@ sudo yum install -y git
 Clone tf-devstack:
 
 ``` bash
-git clone http://github.com/tungstenfabric/tf-devstack
+git clone http://github.com/opensdn-io/tf-devstack
 ```
 
 Deploy TF by means of k8s manifests, for example:

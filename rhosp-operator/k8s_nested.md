@@ -21,7 +21,7 @@ Red Hat account is needed for setting RHEL subscription.
 
     # Download tf-devstack
     sudo yum install -y git
-    git clone http://github.com/tungstenfabric/tf-devstack
+    git clone http://github.com/opensdn-io/tf-devstack
     ```
 
 ### Contrail Control plane installation
@@ -78,7 +78,7 @@ Red Hat account is needed for setting RHEL subscription.
 
     # Run on Overcloud node for Contrail Controller
     sudo yum install -y git
-    git clone http://github.com/tungstenfabric/tf-devstack
+    git clone http://github.com/opensdn-io/tf-devstack
     export CONTAINER_REGISTRY=192.168.21.2:8787
     # Disable Contrail CNI for K8S if it is not supposed to be used there
     export CNI=default
@@ -87,7 +87,7 @@ Red Hat account is needed for setting RHEL subscription.
 
     - Setup Contrail Control plane
     ``` bash
-    git clone http://github.com/tungstenfabric/tf-operator
+    git clone http://github.com/opensdn-io/tf-operator
     # Adjust keystone options according to overcloudrc file on underloud
     export AUTH_MODE=keystone
     export KEYSTONE_AUTH_HOST=overcloud.dev.clouddomain
@@ -100,7 +100,7 @@ Red Hat account is needed for setting RHEL subscription.
     export CNI=default
 
     # Container registry (usually points to udnercloud)
-    export CONTAINER_REGISTRY=192.168.21.2:8787/tungstenfabric
+    export CONTAINER_REGISTRY=192.168.21.2:8787/opensdn
 
     export TF_ROOT_CA_CERT_BASE64=$(cat ca.key.pem | base64 -w 0)
     export TF_ROOT_CA_KEY_BASE64=$(cat ca.crt.pem | base64 -w 0)

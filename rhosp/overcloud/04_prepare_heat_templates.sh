@@ -19,7 +19,7 @@ fi
 
 export undercloud_registry=${prov_ip}:8787
 export undercloud_registry_contrail=$undercloud_registry
-ns=$(echo ${CONTAINER_REGISTRY:-'docker.io/tungstenfabric'} | cut -s -d '/' -f2-)
+ns=$(echo ${CONTAINER_REGISTRY:-'docker.io/opensdn'} | cut -s -d '/' -f2-)
 [ -n "$ns" ] && undercloud_registry_contrail+="/$ns"
 
 
@@ -48,7 +48,7 @@ rm -rf tripleo-heat-templates contrail-tripleo-heat-templates
 cp -r /usr/share/openstack-tripleo-heat-templates/ tripleo-heat-templates
 if ! fetch_deployer_no_docker "tf-tripleo-heat-templates-src" contrail-tripleo-heat-templates ; then
    echo "WARNING: failed to fetch tf-tripleo-heat-templates-src, use github"
-   git clone https://github.com/tungstenfabric/tf-tripleo-heat-templates contrail-tripleo-heat-templates
+   git clone https://github.com/opensdn-io/tf-tripleo-heat-templates contrail-tripleo-heat-templates
 fi
 
 if [[ ! -d contrail-tripleo-heat-templates ]] ; then

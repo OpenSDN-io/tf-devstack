@@ -205,7 +205,7 @@ function tf() {
     if [[ ! -d $JUJU_REPO ]] ; then
         if ! fetch_deployer_no_docker $tf_charms_image $JUJU_REPO ; then
             echo "WARNING: failed to fetch $tf_charms_image, use github"
-            git clone https://github.com/tungstenfabric/tf-charms $JUJU_REPO
+            git clone https://github.com/opensdn-io/tf-charms $JUJU_REPO
         fi
         if [[ -n "$CONTRAIL_DEPLOYER_BRANCH" ]] ; then
             pushd $JUJU_REPO

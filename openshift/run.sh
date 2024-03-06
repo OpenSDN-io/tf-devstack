@@ -89,7 +89,7 @@ function manifest() {
   if [[ ! -d $OPERATOR_REPO ]] ; then
     if ! fetch_deployer_no_docker tf-operator-src $OPERATOR_REPO ; then
       echo "WARNING: failed to fetch tf-operator-src, use github"
-      git clone https://github.com/tungstenfabric/tf-operator.git $OPERATOR_REPO
+      git clone https://github.com/opensdn-io/tf-operator.git $OPERATOR_REPO
     fi
   fi
 
@@ -97,7 +97,7 @@ function manifest() {
   if [[ ! -d $OPENSHIFT_REPO ]]; then
     if ! fetch_deployer_no_docker tf-openshift-src $OPENSHIFT_REPO ; then
       echo "WARNING: failed to fetch tf-openshift-src, use github"
-      git clone https://github.com/tungstenfabric/tf-openshift.git $OPENSHIFT_REPO
+      git clone https://github.com/opensdn-io/tf-openshift.git $OPENSHIFT_REPO
     fi
   fi
 

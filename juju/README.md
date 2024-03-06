@@ -29,7 +29,7 @@ export CLOUD='manual'  # by default
 3. Clone this repository and run the startup script:
 
 ``` bash
-git clone http://github.com/tungstenfabric/tf-devstack
+git clone http://github.com/opensdn-io/tf-devstack
 tf-devstack/juju/run.sh
 ```
 
@@ -72,7 +72,7 @@ If nothing is imported for CONTROLLER_NODES and AGENT_NODES, it will raise one m
 3. Clone this repository and run the startup script:
 
 ``` bash
-git clone http://github.com/tungstenfabric/tf-devstack
+git clone http://github.com/opensdn-io/tf-devstack
 tf-devstack/juju/run.sh
 ```
 
@@ -116,7 +116,7 @@ export AGENT_NODES=*access ips of the machines you prepared for agent nodes*
 4. Clone this repository and run the startup script:
 
 ``` bash
-git clone http://github.com/tungstenfabric/tf-devstack
+git clone http://github.com/opensdn-io/tf-devstack
 tf-devstack/juju/run.sh
 ```
 
@@ -145,7 +145,7 @@ export VIRTUAL_IPS="192.168.51.201 192.168.51.211 192.168.51.214 192.168.51.215 
 3. Clone this repository and run the startup script:
 
 ``` bash
-git clone http://github.com/tungstenfabric/tf-devstack
+git clone http://github.com/opensdn-io/tf-devstack
 tf-devstack/juju/run.sh
 ```
 
@@ -176,7 +176,7 @@ UPSTREAM_DNS (Default: "8.8.8.8")
 2. Clone this repository and run the scripts:
 
 ``` bash
-git clone http://github.com/tungstenfabric/tf-devstack
+git clone http://github.com/opensdn-io/tf-devstack
 tf-devstack/common/deploy_maas.sh
 ```
 
@@ -206,7 +206,7 @@ export CLOUD='manual'  # by default
 3. Clone this repository and run the startup script:
 
 ``` bash
-git clone http://github.com/tungstenfabric/tf-devstack
+git clone http://github.com/opensdn-io/tf-devstack
 tf-devstack/juju/run.sh
 ```
 
@@ -247,7 +247,7 @@ export UBUNTU_SERIES=xenial
 Environment variable list:
 
 - UBUNTU_SERIES - version of ubuntu, by default it's equal to current host
-- CONTAINER_REGISTRY - by default "tungstenfabric"
+- CONTAINER_REGISTRY - by default "opensdn"
 - CONTRAIL_CONTAINER_TAG - by default "latest"
 - CONTRAIL_DEPLOYER_CONTAINER_TAG - by default equal to CONTRAIL_CONTAINER_TAG
 - JUJU_REPO - path to tf-charms, "$PWD/tf-charms" by default

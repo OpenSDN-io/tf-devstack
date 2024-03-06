@@ -17,7 +17,7 @@ Clone and invoke the run.sh script for k8s_manifests
 
 ``` bash
 sudo yum install -y git
-git clone http://github.com/tungstenfabric/tf-devstack
+git clone http://github.com/opensdn-io/tf-devstack
 tf-devstack/k8s_manifests/run.sh
 ```
 
@@ -45,7 +45,7 @@ Individual stages:
 
 Environment variable list:
 
-- CONTAINER_REGISTRY - by default "tungstenfabric"
+- CONTAINER_REGISTRY - by default "opensdn"
 - CONTRAIL_CONTAINER_TAG - by default "master-latest"
 - CONTRAIL_DEPLOYER_CONTAINER_TAG - by default equal to CONTRAIL_CONTAINER_TAG
 - KUBE_MANIFEST - use particular k8s manifest template or ready manifest

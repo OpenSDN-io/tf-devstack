@@ -18,7 +18,7 @@ Clone and invoke the run.sh script
 
 ``` bash
 sudo yum install -y git
-git clone http://github.com/tungstenfabric/tf-devstack
+git clone http://github.com/opensdn-io/tf-devstack
 tf-devstack/openshift/run.sh
 ```
 
@@ -34,7 +34,7 @@ Environment variable list:
 
 - RHEL_USER - RedHat user with available subscription
 - RHEL_PASSWORD - RedHat user password available subscription
-- CONTAINER_REGISTRY - by default "tungstenfabric"
+- CONTAINER_REGISTRY - by default "opensdn"
 - CONTRAIL_CONTAINER_TAG - by default "master-latest"
 - CONTRAIL_DEPLOYER_CONTAINER_TAG - by default equal to CONTRAIL_CONTAINER_TAG
 

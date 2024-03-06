@@ -116,7 +116,7 @@ function manifest() {
     if [[ ! -d $OPERATOR_REPO ]] ; then
         if ! fetch_deployer_no_docker $tf_operator_image $OPERATOR_REPO ; then
             echo "WARNING: failed to fetch $tf_operator_image, use github"
-            git clone https://github.com/tungstenfabric/tf-operator $OPERATOR_REPO
+            git clone https://github.com/opensdn-io/tf-operator $OPERATOR_REPO
         fi
     fi
     export CONFIGDB_MIN_HEAP_SIZE=${CONFIGDB_MIN_HEAP_SIZE:-"1g"}

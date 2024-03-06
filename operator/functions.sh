@@ -86,7 +86,7 @@ function ipa_enroll() {
     local machine
     for machine in $(echo "$nodes" | tr " " "\n" | sort -u) ; do
         local addr="$machine"
-        scp $SSH_OPTIONS -rp "${work_dir}"/src/tungstenfabric/tf-devstack/contrib/ipa/enroll.sh "${machine}":/tmp
+        scp $SSH_OPTIONS -rp "${work_dir}"/src/opensdn-io/tf-devstack/contrib/ipa/enroll.sh "${machine}":/tmp
         echo "INFO: enroll node $machine to IPA"
         ssh $SSH_OPTIONS "$machine" /tmp/enroll.sh "$IPA_IP" "$IPA_ADMIN" "$IPA_PASSWORD" "$machine"
     done
@@ -97,7 +97,7 @@ function ipa_server_install() {
     local work_dir=${WORKSPACE}
     local addr="$machine"
     echo "INFO: copy freeipa_server_root.sh to node $machine"
-    scp $SSH_OPTIONS -rp "${work_dir}"/src/tungstenfabric/tf-devstack/contrib/ipa/freeipa_setup_root.sh "${machine}":
+    scp $SSH_OPTIONS -rp "${work_dir}"/src/opensdn-io/tf-devstack/contrib/ipa/freeipa_setup_root.sh "${machine}":
     echo "INFO: install IPA server at $machine"
 
     if [ -n $NAMESERVER_LIST ]; then

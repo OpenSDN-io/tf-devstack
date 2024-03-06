@@ -18,7 +18,7 @@ openstack overcloud container image prepare \
 echo 'openstack overcloud container image upload --config-file ./overcloud_containers.yaml'
 openstack overcloud container image upload --config-file ./overcloud_containers.yaml
 
-registry=${CONTAINER_REGISTRY:-'docker.io/tungstenfabric'}
+registry=${CONTAINER_REGISTRY:-'docker.io/opensdn'}
 contrail_tag=${CONTRAIL_CONTAINER_TAG:-'latest'}
 ./contrail-tripleo-heat-templates/tools/contrail/import_contrail_container.sh \
     -f ./contrail_containers.yaml -r $registry -t $contrail_tag

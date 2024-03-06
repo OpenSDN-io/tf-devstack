@@ -1,5 +1,5 @@
 ```bash
-git clone https://github.com/tungstenfabric/tf-devstack.git
+git clone https://github.com/opensdn-io/tf-devstack.git
 
 export PROVIDER=kvm
 export DEPLOYER_CONTAINER_REGISTRY="tf-nexus.progmaticlab.com:5102"
@@ -25,7 +25,7 @@ export AGENT_NODES="A1 A2 A3 B1 B2"
 ```
 2. Clone this repository and run the startup script
 ``` bash
-git clone http://github.com/tungstenfabric/tf-devstack
+git clone http://github.com/opensdn-io/tf-devstack
 tf-devstack/openshift/run.sh
 ```
 

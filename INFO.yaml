@@ -31,7 +31,7 @@ meetings:
       repeats: ''
       time: ''
 repositories:
-    - tungstenfabric/tf-devstack
+    - opensdn-io/tf-devstack
 committers:
     - <<: *tungstenfabric_tf-devstack_ptl
     - name: 'Alexandre Levine'
