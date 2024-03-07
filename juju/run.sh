@@ -278,7 +278,7 @@ function tf() {
 
     # show results
     TF_UI_IP=${TF_UI_IP:-"$NODE_IP"}
-    echo "Tungsten Fabric Web UI will be available at https://$TF_UI_IP:8143"
+    echo "Web UI will be available at https://$TF_UI_IP:8143"
     echo "Use admin/password to log in (use 'admin_domain' as domain in case of OpenStack deployment)"
     echo "Or source stackrc for CLI tools after successful deployment"
 }

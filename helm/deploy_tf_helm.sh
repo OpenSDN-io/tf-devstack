@@ -103,8 +103,8 @@ else
   host_var=""
 fi
 
-kubectl create ns tungsten-fabric || :
-helm upgrade --install --namespace tungsten-fabric tungsten-fabric $WORKSPACE/tf-helm-deployer/$TF_CHART -f $WORKSPACE/tf-devstack-values.yaml $host_var
+kubectl create ns opensdn-io || :
+helm upgrade --install --namespace opensdn-io opensdn-io $WORKSPACE/tf-helm-deployer/$TF_CHART -f $WORKSPACE/tf-devstack-values.yaml $host_var
 REMOTE_AGENT_NODES=''
 if [[ $ORCHESTRATOR == "openstack" ]] ; then
   for machine in $AGENT_NODES ; do

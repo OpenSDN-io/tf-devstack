@@ -1,9 +1,9 @@
 # tf-devstack
 
-tf-devstack is a tool for deployment of Tungsten Fabric from published containers or building and deploying from sources.
+tf-devstack is a tool for deployment of OpenSDN from published containers or building and deploying from sources.
 
 It is similar to the OpenStack's devstack tool and
-allows bringing up Tungsten Fabric along with Kubernetes of OpenStack cloud on an all-in-one single node deployment.
+allows bringing up OpenSDN along with Kubernetes of OpenStack cloud on an all-in-one single node deployment.
 
 Possible deployment methods are:
 
@@ -71,7 +71,7 @@ Make required changes in sources fetched to contrail directory. For example, fet
 
 ``` bash
 cd contrail/controller
-git fetch "https://gerrit.tungsten.io/opensdn-io/tf-controller" refs/changes/..... && git checkout FETCH_HEAD
+git fetch "https://gerrit.opensdn.io/opensdn-io/tf-controller" refs/changes/..... && git checkout FETCH_HEAD
 cd ../../
 ```
 

@@ -13,7 +13,7 @@ source "$my_dir/../common/common.sh"
 if [[ -z $target || $target == "tf" ]]; then
   echo "Deleting tf helm charts"
   [ $(rm ~/.tf/.stages/tf) ] || true
-  [ $(helm ls --namespace tungsten-fabric --short | xargs -r -L1 -P2 helm delete --purge) ] || true
+  [ $(helm ls --namespace opensdn-io --short | xargs -r -L1 -P2 helm delete --purge) ] || true
 fi
 
 # TODO: Not checked

@@ -62,7 +62,7 @@ git clone http://github.com/opensdn-io/tf-devstack
 
 ## Installation configuration
 
-Tungsten Fabric is deployed with Kubernetes as orchestrator by default.
+OpenSDN is deployed with Kubernetes as orchestrator by default.
 You can select OpenStack as orchestrator with environment variables before installation.
 
 ``` bash
@@ -93,7 +93,7 @@ Individual stages:
 
 ## Details
 
-To deploy Tungsten Fabric from published containers
+To deploy OpenSDN from published containers
 [tf-container-deployer playbooks](https://github.com/opensdn-io/tf-ansible-deployer) is used. For building step
 [tf-dev-env environment](https://github.com/opensdn-io/tf-dev-env) is used.
 
@@ -126,7 +126,7 @@ Then use the IP:Port/login/password displayed at the end of the output produced 
 - For CentOS Linux only. If the vrouter agent does not start after installation, this is probably due to an outdated version of the Linux kernel. Update your system kernel to the latest version (yum update -y) and reboot your machine
 - Deployment scripts are tested on CentOS 7 / Ubuntu 18.04 and AWS / Virtualbox
 - Occasional errors prevent deployment of Kubernetes on a VirtualBox machine, retry can help
-- One or more of Tungsten Fabric containers are in "Restarting" status after installation,
+- One or more of OpenSDN containers are in "Restarting" status after installation,
 try waiting 2-3 minutes or reboot the instance
 - One or more pods in "Pending" state, try to "kubectl taint nodes NODENAME node-role.kubernetes.io/master-",
 where NODENAME is name from "kubectl get node"
