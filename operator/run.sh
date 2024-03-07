@@ -142,7 +142,7 @@ function tf() {
     # apply crds
     kubectl apply -f $OPERATOR_REPO/deploy/crds/
 
-    wait_cmd_success 'kubectl wait crds --for=condition=Established --timeout=2m managers.tf.tungsten.io' 1 2
+    wait_cmd_success 'kubectl wait crds --for=condition=Established --timeout=2m managers.tf.opensdn.io' 1 2
 
     # apply operator
     kubectl apply -k $OPERATOR_REPO/deploy/kustomize/operator/templates/
