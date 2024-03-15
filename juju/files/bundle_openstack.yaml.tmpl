@@ -6,7 +6,7 @@
 
 # ubuntu 20.04 has only mysql-innodb-cluster charm for mysql db. but it's still ugly and buggy...
 {%- set mysql_innodb = false %}
-{%- if UBUNTU_SERIES == 'focal' %}
+{%- if UBUNTU_SERIES in ['focal', 'jammy']  %}
 # https://bugs.launchpad.net/charm-mysql-innodb-cluster/+bug/1882205
 # for non MAAS deployments mysql/bionic is still preffered
 # let's use percona-cluster in bionic container for now

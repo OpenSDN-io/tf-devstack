@@ -7,7 +7,7 @@
 
 # ubuntu 20.04 has only mysql-innodb-cluster charm for mysql db. but it's still ugly and buggy...
 {%- set mysql_innodb = false %}
-{%- if UBUNTU_SERIES == 'focal' %}
+{%- if UBUNTU_SERIES in ['focal', 'jammy'] %}
 {%- set mysql_innodb = true %}
 {%- endif %}
 

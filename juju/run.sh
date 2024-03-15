@@ -66,7 +66,7 @@ export SRIOV_VF=${SRIOV_VF:-4}
 
 source /etc/lsb-release
 export UBUNTU_SERIES=${UBUNTU_SERIES:-${DISTRIB_CODENAME}}
-declare -A default_openstacks=( ["bionic"]="train" ["focal"]="yoga" ["jammy"]="zed" )
+declare -A default_openstacks=( ["bionic"]="train" ["focal"]="ussuri" ["jammy"]="yoga" )
 default_openstack=${default_openstacks[$UBUNTU_SERIES]}
 export OPENSTACK_VERSION=${OPENSTACK_VERSION:-$default_openstack}
 export VIRT_TYPE=${VIRT_TYPE:-'qemu'}
@@ -121,7 +121,9 @@ function openstack() {
 
     if [[ "$UBUNTU_SERIES" == 'bionic' && "$OPENSTACK_VERSION" == 'queens' ]]; then
         export OPENSTACK_ORIGIN="distro"
-    elif [[ "$UBUNTU_SERIES" == 'focal' && "$OPENSTACK_VERSION" == 'yoga' ]]; then
+    elif [[ "$UBUNTU_SERIES" == 'focal' && "$OPENSTACK_VERSION" == 'ussuri' ]]; then
+        export OPENSTACK_ORIGIN="distro"
+    elif [[ "$UBUNTU_SERIES" == 'jammy' && "$OPENSTACK_VERSION" == 'yoga' ]]; then
         export OPENSTACK_ORIGIN="distro"
     else
         export OPENSTACK_ORIGIN="cloud:$UBUNTU_SERIES-$OPENSTACK_VERSION"
@@ -165,9 +167,13 @@ function openstack() {
         echo "INFO: update nova-compute for unit: $unit"
         local unit_formatted=$(echo $unit | sed 's*/*-*g')
         # patch
-        $(which juju) ssh $unit "sudo sed -i 's/\[libvirt\]/\[libvirt\]\nvirt_type = {{ virt_type }}/g' /var/lib/juju/agents/unit-${unit_formatted}/charm/templates/${openstack_version}/nova.conf"
+        os_ver=${openstack_version}
+        if [ ${openstack_version} == 'ussuri' ] ; then
+          os_ver='train'
+        fi
+        $(which juju) ssh $unit "sudo sed -i 's/\[libvirt\]/\[libvirt\]\nvirt_type = {{ virt_type }}/g' /var/lib/juju/agents/unit-${unit_formatted}/charm/templates/${os_ver}/nova.conf"
         # for some reason it takes config template from train
-        $(which juju) ssh $unit "sudo sed -i 's/\[libvirt\]/\[libvirt\]\nvirt_type = {{ virt_type }}/g' /var/lib/juju/agents/unit-${unit_formatted}/charm/templates/train/nova.conf"
+        $(which juju) ssh $unit "sudo sed -i 's/\[libvirt\]/\[libvirt\]\nvirt_type = {{ virt_type }}/g' /var/lib/juju/agents/unit-${unit_formatted}/charm/templates/train/nova.conf || true"
         command juju run --unit $unit "hooks/config-changed" >/dev/null
     done
 }
