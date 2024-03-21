@@ -70,6 +70,7 @@ instances:
 {%- endfor %}
 
 global_configuration:
+  ENABLE_DESTROY: False
   CONTAINER_REGISTRY: "{{ CONTAINER_REGISTRY }}"
   REGISTRY_PRIVATE_INSECURE: True
 {% if K8S_YUM_REPO_URL %}
