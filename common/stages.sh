@@ -104,6 +104,7 @@ function logs() {
   set +e
 
   create_log_dir
+  collect_deployment_env
   collect_logs
   tar -czf ${WORKSPACE}/logs.tgz -C ${TF_LOG_DIR}/.. logs
   rm -rf $TF_LOG_DIR

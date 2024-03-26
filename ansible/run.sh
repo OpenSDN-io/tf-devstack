@@ -193,6 +193,7 @@ function collect_deployment_env() {
     cp $tf_deployer_dir/instances.yaml $TF_CONFIG_DIR/
 
     if [[ $ORCHESTRATOR == 'openstack' || "$ORCHESTRATOR" == "hybrid" ]] ; then
+        cp $openstack_deployer_dir/etc/kolla/* $TF_CONFIG_DIR/ || /bin/true
         DEPLOYMENT_ENV['OPENSTACK_CONTROLLER_NODES']="$(echo $CONTROLLER_NODES | cut -d ' ' -f 1)"
     fi
 
