@@ -75,6 +75,9 @@ function machines() {
         fi
         sudo -E apt-get install -y python3-setuptools python3-distutils iproute2 python3-cryptography jq dnsutils chrony
         sudo apt-get purge -y python3-yaml
+        # pip3 is installed at /usr/local/bin which is not in sudoers secure_path by default
+        # use it as "python3 -m pip" with sudo
+        curl --retry 3 --retry-delay 10 https://bootstrap.pypa.io/pip/3.6/get-pip.py | sudo python3
     elif [[ "$DISTRO" == "rocky" ]]; then
         sudo dnf check-update || true
         sudo dnf install -y python3 python3-setuptools libselinux-python3 iproute jq bind-utils python3-pip
