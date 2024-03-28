@@ -64,6 +64,9 @@ function machines() {
             sudo yum install -y epel-release
         fi
         sudo yum install -y python3 python3-setuptools libselinux-python3 iproute jq bind-utils
+        # pip3 is installed at /usr/local/bin which is not in sudoers secure_path by default
+        # use it as "python3 -m pip" with sudo
+        curl --retry 3 --retry-delay 10 https://bootstrap.pypa.io/pip/3.6/get-pip.py | sudo python3
     elif [ "$DISTRO" == "ubuntu" ]; then
         export DEBIAN_FRONTEND=noninteractive
         sudo -E apt-get update -y
@@ -72,14 +75,13 @@ function machines() {
         fi
         sudo -E apt-get install -y python3-setuptools python3-distutils iproute2 python3-cryptography jq dnsutils chrony
         sudo apt-get purge -y python3-yaml
+    elif [[ "$DISTRO" == "rocky" ]]; then
+        sudo dnf check-update || true
+        sudo dnf install -y python3 python3-setuptools libselinux-python3 iproute jq bind-utils python3-pip
     else
         echo "Unsupported OS version"
         exit 1
     fi
-
-    # pip3 is installed at /usr/local/bin which is not in sudoers secure_path by default
-    # use it as "python3 -m pip" with sudo
-    curl --retry 3 --retry-delay 10 https://bootstrap.pypa.io/pip/3.6/get-pip.py | sudo python3
 
     # docker-compose MUST be first here, because it will install the right version of PyYAML
     # jinja is reqiured to create some configs
@@ -123,7 +125,7 @@ function k8s() {
     if [[ "$ORCHESTRATOR" != "kubernetes" ]]; then
         echo "INFO: Skipping k8s deployment"
     else
-        sudo -E PATH=$PATH:/usr/local/bin ansible-playbook -v -e orchestrator=$ORCHESTRATOR \
+        sudo -E env PATH=$PATH:/usr/local/bin ansible-playbook -v -e orchestrator=$ORCHESTRATOR \
             -e config_file=$tf_deployer_dir/instances.yaml \
             $tf_deployer_dir/playbooks/install_k8s.yml
     fi
@@ -133,7 +135,7 @@ function openstack() {
     if [[ "$ORCHESTRATOR" != "openstack" ]]; then
         echo "INFO: Skipping openstack deployment"
     else
-        sudo -E PATH=$PATH:/usr/local/bin ansible-playbook -v -e orchestrator=$ORCHESTRATOR \
+        sudo -E env PATH=$PATH:/usr/local/bin ansible-playbook -v -e orchestrator=$ORCHESTRATOR \
             -e config_file=$tf_deployer_dir/instances.yaml \
             $tf_deployer_dir/playbooks/install_openstack.yml
     fi
@@ -160,7 +162,7 @@ function tf() {
         fi
     fi
 
-    sudo -E PATH=$PATH:/usr/local/bin ansible-playbook -v -e orchestrator=$ORCHESTRATOR \
+    sudo -E env PATH=$PATH:/usr/local/bin ansible-playbook -v -e orchestrator=$ORCHESTRATOR \
         -e config_file=$tf_deployer_dir/instances.yaml \
         $tf_deployer_dir/playbooks/install_contrail.yml
 

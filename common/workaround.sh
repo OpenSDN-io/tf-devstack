@@ -15,7 +15,7 @@ function workaround_kubespray_docker_cli() {
 
   local nodes="${CONTROLLER_NODES} ${AGENT_NODES}"
 
-  if [[ "$DISTRO" == "centos" || "$DISTRO" == "rhel" ]]; then
+  if [[ "$DISTRO" == "centos" || "$DISTRO" == "rhel" || "$DISTRO" == "rocky" ]]; then
     local node
     for node in $nodes; do
       # check if node is remote - then use ssh, anyway run commands locally

@@ -30,14 +30,14 @@ function set_env_var() {
 # parameters
 
 # this version still supports 1.20
-KUBESPRAY_TAG=${KUBESPRAY_TAG:="release-2.18"}
+KUBESPRAY_TAG=${KUBESPRAY_TAG:="release-2.24"}
 K8S_MASTERS=${K8S_MASTERS:-$NODE_IP}
 K8S_NODES=${K8S_NODES-$NODE_IP}
 # host_resolvconf or none
 K8S_RESOLV_CONFG_MODE=${K8S_RESOLV_CONFG_MODE:-'host_resolvconf'}
 K8S_POD_SUBNET=${K8S_POD_SUBNET:-"10.32.0.0/12"}
 K8S_SERVICE_SUBNET=${K8S_SERVICE_SUBNET:-"10.96.0.0/12"}
-K8S_VERSION=${K8S_VERSION:-"v1.22.8"}
+K8S_VERSION=${K8S_VERSION:-"v1.28.6"}
 K8S_CLUSTER_NAME=${K8S_CLUSTER_NAME:-''}
 K8S_DOMAIN=${K8S_DOMAIN:-''}
 
@@ -70,7 +70,7 @@ fi
 
 # install required packages
 
-if [[ "$DISTRO" == "centos" || "$DISTRO" == "rhel" ]]; then
+if [[ "$DISTRO" == "centos" || "$DISTRO" == "rhel" || "$DISTRO" == "rocky" ]]; then
     sudo yum install -y python3 python3-pip libyaml-devel python3-devel git network-scripts
 elif [ "$DISTRO" == "ubuntu" ]; then
     # Ensure updates repo is available
