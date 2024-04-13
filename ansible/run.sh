@@ -37,6 +37,11 @@ export OPENSTACK_VERSION=${OPENSTACK_VERSION:-train}
 export AUTH_PASSWORD='contrail123'
 export VIRT_TYPE=qemu
 
+export KOLLA_BASE_DISTRO="centos"
+if [[ "$OPENSTACK_VERSION" == "zed" || "$OPENSTACK_VERSION" == "2023.1" || "$OPENSTACK_VERSION" == "2023.2" ]]; then
+  export KOLLA_BASE_DISTRO="rocky"
+fi
+
 export DOMAINSUFFIX=${DOMAINSUFFIX-$(hostname -d)}
 
 # deployment related environment set by any stage and put to tf_stack_profile at the end

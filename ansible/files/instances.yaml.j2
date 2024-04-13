@@ -124,7 +124,7 @@ kolla_config:
     enable_ironic: no
     enable_ironic_notifications: no
     openstack_service_workers: 1
-    kolla_base_distro: "centos"
+    kolla_base_distro: "{{ KOLLA_BASE_DISTRO }}"
     nova_logging_debug: "True"
     neutron_logging_debug: "True"
     heat_logging_debug: "True"
