@@ -62,27 +62,16 @@ function machines() {
 
     fi
     if [[ "$DISTRO" == "centos" || "$DISTRO" == "rhel" ]]; then
-        # remove packages that may cause conflicts,
-        # all requried ones be re-installed
-        sudo yum autoremove -y python-yaml python-requests python-urllib3
-        if ! sudo yum repolist | grep -q epel ; then
-            sudo yum install -y epel-release
-        fi
-        sudo yum install -y python3 python3-setuptools libselinux-python3 iproute jq bind-utils
-        # pip3 is installed at /usr/local/bin which is not in sudoers secure_path by default
-        # use it as "python3 -m pip" with sudo
-        curl --retry 3 --retry-delay 10 https://bootstrap.pypa.io/pip/3.6/get-pip.py | sudo python3
+        echo "ERROR: RedHat/CentOS OS-es are not supported more"
+        exit 1
     elif [ "$DISTRO" == "ubuntu" ]; then
         export DEBIAN_FRONTEND=noninteractive
         sudo -E apt-get update -y
+        sudo -E apt-get install -y python3-setuptools python3-distutils iproute2 python3-cryptography jq dnsutils chrony python3-pip
+        # required for old versions of kolla where shebang is python
         if [[ "$DISTRO_VERSION_ID" = "20.04" || "$DISTRO_VERSION_ID" = "22.04" ]]; then
-                sudo -E ln -sf /usr/bin/python3 /usr/bin/python
+            sudo -E ln -sf /usr/bin/python3 /usr/bin/python
         fi
-        sudo -E apt-get install -y python3-setuptools python3-distutils iproute2 python3-cryptography jq dnsutils chrony
-        sudo apt-get purge -y python3-yaml
-        # pip3 is installed at /usr/local/bin which is not in sudoers secure_path by default
-        # use it as "python3 -m pip" with sudo
-        curl --retry 3 --retry-delay 10 https://bootstrap.pypa.io/pip/3.6/get-pip.py | sudo python3
     elif [[ "$DISTRO" == "rocky" ]]; then
         sudo dnf check-update || true
         sudo dnf install -y python3 python3-setuptools libselinux-python3 iproute jq bind-utils python3-pip
@@ -91,10 +80,15 @@ function machines() {
         exit 1
     fi
 
-    # docker-compose MUST be first here, because it will install the right version of PyYAML
+    ansible_pkg="ansible<3"
+    if [[ ${OPENSTACK_VERSION:0:4} == '2023' ]]; then
+        ansible_pkg="ansible>=6"
+    elif [[ ${OPENSTACK_VERSION:0:1} > 'x' ]]; then
+        ansible_pkg="ansible>=4"
+    fi
+
     # jinja is reqiured to create some configs
-    sudo LANG=en_US.UTF-8 LC_ALL=en_US.UTF-8 python3 -m pip install 'docker-compose==1.24.1' 'setuptools>44,<45' 'ansible==2.10' 'jinja2==3.0.3' pyyaml
-    sudo LANG=en_US.UTF-8 LC_ALL=en_US.UTF-8 python3 -m pip install pyopenssl --upgrade
+    sudo LANG=en_US.UTF-8 LC_ALL=en_US.UTF-8 python3 -m pip install --upgrade "$ansible_pkg" 'jinja2==3.0.3' pyopenssl
 
     set_ssh_keys
 
