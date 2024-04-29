@@ -52,7 +52,7 @@ declare -A DEPLOYMENT_ENV
 
 function machines() {
     echo "$DISTRO detected"
-    if [[ "$DISTRO" == "centos" ]]; then
+    if [[ "$DISTRO" == "centos" || "$DISTRO" == "rocky" ]]; then
         if ! sudo yum repolist | grep -q epel ; then
             sudo yum -y install epel-release
         fi

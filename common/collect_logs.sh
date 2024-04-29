@@ -560,7 +560,7 @@ function collect_core_dumps() {
 
     if ! command -v gdb &> /dev/null; then
         local distro=$(cat /etc/*release | egrep '^ID=' | awk -F= '{print $2}' | tr -d \")
-        if [[ "$distro" == "centos" || "$distro" == "rhel" ]]; then
+        if [[ "$distro" == "centos" || "$distro" == "rhel" || "$distro" == "rocky9" ]]; then
             sudo yum install -y gdb
         elif [ "$distro" == "ubuntu" ]; then
             export DEBIAN_FRONTEND=noninteractive
