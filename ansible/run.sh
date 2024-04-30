@@ -82,9 +82,9 @@ function machines() {
 
     ansible_pkg="ansible<3"
     if [[ ${OPENSTACK_VERSION:0:4} == '2023' ]]; then
-        ansible_pkg="ansible>=6"
+        ansible_pkg="ansible<8"
     elif [[ ${OPENSTACK_VERSION:0:1} > 'x' ]]; then
-        ansible_pkg="ansible>=4"
+        ansible_pkg="ansible<6"
     fi
 
     # jinja is reqiured to create some configs
