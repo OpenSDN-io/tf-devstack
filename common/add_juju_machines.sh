@@ -35,7 +35,7 @@ for machine in $(timeout -s 9 30 juju machines --format tabular | tail -n +2 | g
         ssh $SSH_USER@$machine "lxd init --auto ; lxc network set lxdbr0 ipv6.address none"
         # zfs for lxd in a same disk doesn't help
         # TODO: check timings with zfs on separate disk
-#        ssh $SSH_USER@$machine "lxd init --auto --storage-backend=zfs --storage-create-loop=40 ; lxc network set lxdbr0 ipv6.address none"
+        #ssh $SSH_USER@$machine "lxd init --auto --storage-backend=zfs --storage-create-loop=40 ; lxc network set lxdbr0 ipv6.address none"
     fi
 
     # Switching to local stable LXD images
@@ -43,13 +43,11 @@ for machine in $(timeout -s 9 30 juju machines --format tabular | tail -n +2 | g
         echo "INFO: download cached lxd image on machine $machine"
         ssh $SSH_USER@$machine "wget -nv $lxd_url/$UBUNTU_SERIES-server-cloudimg-amd64-lxd.tar.xz $lxd_url/$UBUNTU_SERIES-server-cloudimg-amd64-root.tar.xz"
         ssh $SSH_USER@$machine "lxc image import $UBUNTU_SERIES-server-cloudimg-amd64-lxd.tar.xz $UBUNTU_SERIES-server-cloudimg-amd64-root.tar.xz --alias juju/$UBUNTU_SERIES/amd64 > /dev/null"
-        # if [[ "$UBUNTU_SERIES" != 'bionic' ]]; then
-        #     # some components are always binoic so we have to apply it too
-        #     ssh $SSH_USER@$machine "wget -nv $lxd_url/bionic-server-cloudimg-amd64-lxd.tar.xz $lxd_url/bionic-server-cloudimg-amd64-root.tar.xz"
-        #     ssh $SSH_USER@$machine "lxc image import bionic-server-cloudimg-amd64-lxd.tar.xz bionic-server-cloudimg-amd64-root.tar.xz --alias juju/bionic/amd64 > /dev/null"
-        # fi
         ssh $SSH_USER@$machine 'lxc image list'
-        ssh $SSH_USER@$machine 'printf "\n127.0.0.1 cloud-images.ubuntu.com\n127.0.0.1 streams.ubuntu.com\n" | sudo tee -a /etc/hosts'
+        # don't hide cloud-images
+        # juju 2.9.49 wants to access http://cloud-images.ubuntu.com/releases/streams/v1/index2.sjson
+        # even if it doesn't required for deploy process
+        #ssh $SSH_USER@$machine 'printf "\n127.0.0.1 cloud-images.ubuntu.com\n127.0.0.1 streams.ubuntu.com\n" | sudo tee -a /etc/hosts'
     fi
 done
 

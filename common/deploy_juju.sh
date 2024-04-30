@@ -33,8 +33,8 @@ if [[ $i == 5 ]]; then
 fi
 
 #sudo snap install --classic juju
-curl -sSLO https://launchpad.net/juju/2.9/2.9.22/+download/juju-2.9.22-linux-amd64.tar.xz
-tar xf juju-2.9.22-linux-amd64.tar.xz 
+curl -sSLO https://launchpad.net/juju/2.9/2.9.49/+download/juju-2.9.49-linux-amd64.tar.xz
+tar xf juju-2.9.49-linux-amd64.tar.xz 
 sudo install -o root -g root -m 0755 juju /usr/local/bin/juju
 hash -r
 
