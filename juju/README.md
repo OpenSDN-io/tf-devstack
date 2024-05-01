@@ -238,7 +238,7 @@ You can select different Ubuntu version for deploy with environment variables be
 But this can be specified only for cases when your jumphost is not in a list of machines for setup.
 
 ``` bash
-export UBUNTU_SERIES=xenial
+export UBUNTU_SERIES=focal
 ./run.sh
 ```
 

@@ -205,24 +205,24 @@ services:
 {%- if SSL_ENABLE.lower() == 'true' %}
   easyrsa:
     # this must be one in HA
-    charm: cs:~containers/easyrsa
+    charm: easyrsa
     num_units: 1
     to:
       - "0"
 {%- endif %}
 {%- if ENABLE_NAGIOS.lower() == 'true' %}
   nrpe:
-    charm: cs:nrpe-73
+    charm: nrpe
 {%- endif %}
 {%- if CLOUD == 'maas' %}
   keepalived:
-    charm: cs:~containers/keepalived
+    charm: keepalived
     options:
       virtual_ip: *tf-controller-vip
       # do checks for haproxy monitoring_port
       port: 10000
   haproxy:
-    charm: cs:haproxy
+    charm: haproxy
     num_units: 3
     expose: true
     to: {{ controller_nodes }}
