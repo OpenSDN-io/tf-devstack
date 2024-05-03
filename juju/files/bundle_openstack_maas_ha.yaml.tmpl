@@ -382,7 +382,7 @@ services:
   # misc
 
   ubuntu:
-    charm: "cs:{{ UBUNTU_SERIES }}/ubuntu"
+    charm: "ubuntu"
     num_units: 5
     bindings:
       "": *default-space
@@ -393,7 +393,7 @@ services:
       - "3"
       - "4"
   ntp:
-    charm: "cs:{{ UBUNTU_SERIES }}/ntp-41"
+    charm: "ntp"
 {%- if NTP_SERVERS %}
     options:
       source: "{{ NTP_SERVERS }}"
