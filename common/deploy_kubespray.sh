@@ -72,7 +72,7 @@ fi
 
 if [[ "$DISTRO" == "centos" || "$DISTRO" == "rhel" ]]; then
     sudo yum install -y python3 python3-pip libyaml-devel python3-devel git network-scripts
-if [[ "$DISTRO" == "rocky" ]]; then
+elif [[ "$DISTRO" == "rocky" ]]; then
     sudo yum install -y python3 python3-pip python3-devel git
 elif [ "$DISTRO" == "ubuntu" ]; then
     # Ensure updates repo is available
