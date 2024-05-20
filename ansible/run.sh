@@ -47,6 +47,7 @@ export DOMAINSUFFIX=${DOMAINSUFFIX-$(hostname -d)}
 # deployment related environment set by any stage and put to tf_stack_profile at the end
 declare -A DEPLOYMENT_ENV=( \
     ['AUTH_PASSWORD']="$AUTH_PASSWORD" \
+    ['AUTH_URL']=''\
 )
 
 function build() {
@@ -200,6 +201,13 @@ function collect_deployment_env() {
         sudo chmod -R a+r $openstack_deployer_dir/etc/kolla/ || /bin/true
         cp $openstack_deployer_dir/etc/kolla/* $TF_CONFIG_DIR/ || /bin/true
         DEPLOYMENT_ENV['OPENSTACK_CONTROLLER_NODES']="$(echo $CONTROLLER_NODES | cut -d ' ' -f 1)"
+
+        local auth_ip=$(echo "$CONTROLLER_NODES" | tr ' ' ',' | cut -d ',' -f 1)
+        local proto="http"
+        if [[ "${SSL_ENABLE,,}" == 'true' ]] ; then
+            proto="https"
+        fi
+        DEPLOYMENT_ENV['OS_AUTH_URL']="$proto://$auth_ip:5000/v3"
     fi
 
     if ! is_after_stage 'wait' ; then
