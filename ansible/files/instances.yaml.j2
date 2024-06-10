@@ -110,6 +110,11 @@ contrail_configuration:
 {%- endif %}
 
 {%- if ORCHESTRATOR in ['openstack', 'hybrid'] %}
+{%- if KOLLA_MODE == 'vanilla' %}
+  KOLLA_MODE: vanilla
+{%- else %}
+  KOLLA_MODE: patched
+{%- endif %}
   OPENSTACK_VERSION: "{{ OPENSTACK_VERSION }}"
   AUTH_MODE: keystone
   AAA_MODE: rbac
@@ -128,6 +133,12 @@ kolla_config:
     nova_logging_debug: "True"
     neutron_logging_debug: "True"
     heat_logging_debug: "True"
+{%- if KOLLA_MODE == 'vanilla' %}
+    neutron_plugin_agent: "opensdn"
+    neutron_server_extra_volumes: ["opensdn:/opt/plugin/"]
+    nova_compute_extra_volumes: ["opensdn:/opt/plugin/"]
+    heat_engine_extra_volumes: ["opensdn:/opt/plugin/"]
+{%- endif %}
   kolla_passwords:
     keystone_admin_password: contrail123
 {%- endif %}

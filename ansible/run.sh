@@ -34,6 +34,8 @@ openstack_deployer_image=${OPENSTACK_DEPLOYER:-"tf-kolla-ansible-src"}
 export ANSIBLE_CONFIG=$tf_deployer_dir/ansible.cfg
 
 export OPENSTACK_VERSION=${OPENSTACK_VERSION:-yoga}
+#type of kolla-ansible installation: patched (by default) or vanilla
+export KOLLA_MODE=${KOLLA_MODE:-patched}
 export AUTH_PASSWORD='contrail123'
 export VIRT_TYPE=qemu
 
@@ -137,6 +139,10 @@ function k8s() {
 function openstack() {
     if [[ "$ORCHESTRATOR" != "openstack" ]]; then
         echo "INFO: Skipping openstack deployment"
+    elif [["$KOLLA_MODE" == "vanilla" ]]; then
+        sudo -E env PATH=$PATH:/usr/local/bin ansible-playbook -v -e orchestrator=$ORCHESTRATOR \
+            -e config_file=$tf_deployer_dir/instances.yaml \
+            $tf_deployer_dir/playbooks/install_vanilla_openstack.yml
     else
         sudo -E env PATH=$PATH:/usr/local/bin ansible-playbook -v -e orchestrator=$ORCHESTRATOR \
             -e config_file=$tf_deployer_dir/instances.yaml \
@@ -157,7 +163,7 @@ function tf() {
         -e config_file=$tf_deployer_dir/instances.yaml \
         $tf_deployer_dir/playbooks/configure_instances.yml
 
-        if [[ "$ORCHESTRATOR" == "openstack" ]]; then
+        if [[ "$ORCHESTRATOR" == "openstack" && "$KOLLA_MODE" != "vanilla" ]]; then
             sudo -E PATH=$PATH:/usr/local/bin ansible-playbook -v -e orchestrator=$ORCHESTRATOR \
                 -e config_file=$tf_deployer_dir/instances.yaml \
                 $tf_deployer_dir/playbooks/install_openstack.yml \
@@ -168,6 +174,12 @@ function tf() {
     sudo -E env PATH=$PATH:/usr/local/bin ansible-playbook -v -e orchestrator=$ORCHESTRATOR \
         -e config_file=$tf_deployer_dir/instances.yaml \
         $tf_deployer_dir/playbooks/install_contrail.yml
+
+    if [[ "$ORCHESTRATOR" == "openstack" && "$KOLLA_MODE" == "vanilla" ]]; then
+	    sudo -E PATH=$PATH:/usr/local/bin ansible-playbook -v -e orchestrator=$ORCHESTRATOR \
+            -e config_file=$tf_deployer_dir/instances.yaml \
+            $tf_deployer_dir/playbooks/config_openstack.yml
+    fi
 
     if ! wait_cmd_success "wait_vhost0_up ${AGENT_NODES}" 5 24
     then
