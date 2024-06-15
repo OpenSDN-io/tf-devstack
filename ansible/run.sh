@@ -139,7 +139,7 @@ function k8s() {
 function openstack() {
     if [[ "$ORCHESTRATOR" != "openstack" ]]; then
         echo "INFO: Skipping openstack deployment"
-    elif [["$KOLLA_MODE" == "vanilla" ]]; then
+    elif [[ "$KOLLA_MODE" == "vanilla" ]]; then
         sudo -E env PATH=$PATH:/usr/local/bin ansible-playbook -v -e orchestrator=$ORCHESTRATOR \
             -e config_file=$tf_deployer_dir/instances.yaml \
             $tf_deployer_dir/playbooks/install_vanilla_openstack.yml
@@ -176,7 +176,7 @@ function tf() {
         $tf_deployer_dir/playbooks/install_contrail.yml
 
     if [[ "$ORCHESTRATOR" == "openstack" && "$KOLLA_MODE" == "vanilla" ]]; then
-	    sudo -E PATH=$PATH:/usr/local/bin ansible-playbook -v -e orchestrator=$ORCHESTRATOR \
+        sudo -E PATH=$PATH:/usr/local/bin ansible-playbook -v -e orchestrator=$ORCHESTRATOR \
             -e config_file=$tf_deployer_dir/instances.yaml \
             $tf_deployer_dir/playbooks/config_openstack.yml
     fi
