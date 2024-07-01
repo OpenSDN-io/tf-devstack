@@ -108,7 +108,9 @@ contrail_configuration:
     network: __public__
     project: k8s-default
 {%- endif %}
-
+{%- if HUGE_PAGES_2MB %}
+  HUGE_PAGES_2MB: "{{ HUGE_PAGES_2MB }}"
+{%- endif %}
 {%- if ORCHESTRATOR in ['openstack', 'hybrid'] %}
 {%- if KOLLA_MODE == 'vanilla' %}
   KOLLA_MODE: vanilla
@@ -119,9 +121,6 @@ contrail_configuration:
   AUTH_MODE: keystone
   AAA_MODE: rbac
   KEYSTONE_AUTH_URL_VERSION: /v3
-{%- if HUGE_PAGES_2MB %}
-  HUGE_PAGES_2MB: "{{ HUGE_PAGES_2MB }}"
-{%- endif %}
 kolla_config:
   kolla_globals:
     nova_compute_virt_type: "{{ VIRT_TYPE }}"
