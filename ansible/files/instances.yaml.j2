@@ -100,6 +100,9 @@ contrail_configuration:
 {%- if APPLY_DEFAULTS is defined and APPLY_DEFAULTS|length  %}
   APPLY_DEFAULTS: "{{ APPLY_DEFAULTS }}"
 {%- endif %}
+{%- if CONFIG_API_WORKER_COUNT is defined  %}
+  CONFIG_API_WORKER_COUNT: "{{ CONFIG_API_WORKER_COUNT }}"
+{%- endif %}
 
 {%- if ORCHESTRATOR in ['kubernetes', 'hybrid'] %}
   KUBERNETES_PUBLIC_FIP_POOL:

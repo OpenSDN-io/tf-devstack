@@ -47,7 +47,7 @@ function fetch_deployer_no_docker() {
     return 1
   fi
   tar xf ${tmp_deployer_layers_dir}/$(cat ${tmp_deployer_layers_dir}/manifest.json | jq --raw-output '.[0].Layers[0]') -C ${archive_tmp_dir}
-  rm -rf $deployer_dir
+  sudo rm -rf $deployer_dir
   if [[ ! -d "${archive_tmp_dir}/src" ]] ; then
     echo "ERROR: No src folder in ${archive_tmp_dir}/src. Exit"
     return 1
