@@ -1,0 +1,248 @@
+series: jammy
+applications:
+  nova-compute:
+    charm: nova-compute
+    channel: yoga/stable
+    revision: 740
+    num_units: 5
+    to:
+    - "2"
+    - "3"
+    - "4"
+    - "5"
+    - "6"
+    options:
+      debug: true
+      enable-live-migration: true
+      enable-resize: true
+      migration-auth-type: ssh
+      openstack-origin: distro
+      virt-type: qemu
+    constraints: arch=amd64
+    storage:
+      ephemeral-device: loop,10240M
+  dashboard-mysql-router:
+    charm: mysql-router
+    channel: 8.0/stable
+    revision: 200
+    options:
+      source: distro
+  glance:
+    charm: glance
+    channel: yoga/stable
+    revision: 620
+    num_units: 1
+    to:
+    - lxd:0
+    expose: true
+    options:
+      debug: true
+      openstack-origin: distro
+    constraints: arch=amd64
+  glance-mysql-router:
+    charm: mysql-router
+    channel: 8.0/stable
+    revision: 200
+    options:
+      source: distro
+  heat:
+    charm: heat
+    channel: yoga/stable
+    revision: 548
+    num_units: 1
+    to:
+    - lxd:0
+    expose: true
+    options:
+      debug: true
+      openstack-origin: distro
+    constraints: arch=amd64
+  heat-mysql-router:
+    charm: mysql-router
+    channel: 8.0/stable
+    revision: 200
+    options:
+      source: distro
+  keystone:
+    charm: keystone
+    channel: yoga/stable
+    revision: 689
+    num_units: 1
+    to:
+    - lxd:0
+    expose: true
+    options:
+      admin-password: password
+      admin-role: admin
+      debug: true
+      openstack-origin: distro
+      preferred-api-version: 3
+      service-port: 5050
+    constraints: arch=amd64
+  keystone-mysql-router:
+    charm: mysql-router
+    channel: 8.0/stable
+    revision: 200
+    options:
+      source: distro
+  mysql-innodb-cluster:
+    charm: mysql-innodb-cluster
+    channel: 8.0/stable
+    revision: 133
+    num_units: 3
+    to:
+    - lxd:0
+    - lxd:0
+    - lxd:0
+    options:
+      innodb-buffer-pool-size: 256M
+      max-connections: 1500
+    constraints: arch=amd64
+  neutron-api:
+    charm: neutron-api
+    channel: yoga/stable
+    revision: 597
+    num_units: 1
+    to:
+    - lxd:0
+    expose: true
+    options:
+      debug: true
+      manage-neutron-plugin-legacy-mode: false
+      neutron-security-groups: true
+      openstack-origin: distro
+    constraints: arch=amd64
+  neutron-mysql-router:
+    charm: mysql-router
+    channel: 8.0/stable
+    revision: 200
+    options:
+      source: distro
+  nova-cloud-controller:
+    charm: nova-cloud-controller
+    channel: yoga/stable
+    revision: 756
+    num_units: 1
+    to:
+    - lxd:0
+    expose: true
+    options:
+      cache-known-hosts: false
+      console-access-protocol: novnc
+      debug: true
+      network-manager: Neutron
+      openstack-origin: distro
+    constraints: arch=amd64
+  nova-mysql-router:
+    charm: mysql-router
+    channel: 8.0/stable
+    revision: 200
+    options:
+      source: distro
+  openstack-dashboard:
+    charm: openstack-dashboard
+    channel: yoga/stable
+    revision: 648
+    num_units: 1
+    to:
+    - lxd:0
+    expose: true
+    options:
+      debug: "true"
+      openstack-origin: distro
+    constraints: arch=amd64
+  placement:
+    charm: placement
+    channel: yoga/stable
+    revision: 94
+    num_units: 1
+    to:
+    - lxd:0
+    options:
+      debug: true
+      openstack-origin: distro
+    constraints: arch=amd64
+  placement-mysql-router:
+    charm: mysql-router
+    channel: 8.0/stable
+    revision: 200
+    options:
+      source: distro
+  rabbitmq-server:
+    charm: rabbitmq-server
+    channel: 3.9/stable
+    revision: 188
+    num_units: 1
+    to:
+    - lxd:0
+    options:
+      min-cluster-size: 1
+    constraints: arch=amd64
+machines:
+  "0": {}
+  "2": {}
+  "3": {}
+  "4": {}
+  "5": {}
+  "6": {}
+relations:
+- - keystone-mysql-router:db-router
+  - mysql-innodb-cluster:db-router
+- - glance-mysql-router:db-router
+  - mysql-innodb-cluster:db-router
+- - nova-mysql-router:db-router
+  - mysql-innodb-cluster:db-router
+- - neutron-mysql-router:db-router
+  - mysql-innodb-cluster:db-router
+- - dashboard-mysql-router:db-router
+  - mysql-innodb-cluster:db-router
+- - heat-mysql-router:db-router
+  - mysql-innodb-cluster:db-router
+- - placement-mysql-router:db-router
+  - mysql-innodb-cluster:db-router
+- - placement:identity-service
+  - keystone:identity-service
+- - placement:placement
+  - nova-cloud-controller:placement
+- - nova-cloud-controller:identity-service
+  - keystone:identity-service
+- - glance:identity-service
+  - keystone:identity-service
+- - neutron-api:identity-service
+  - keystone:identity-service
+- - neutron-api:amqp
+  - rabbitmq-server:amqp
+- - glance:amqp
+  - rabbitmq-server:amqp
+- - glance:image-service
+  - nova-cloud-controller:image-service
+- - rabbitmq-server:amqp
+  - nova-cloud-controller:amqp
+- - openstack-dashboard:identity-service
+  - keystone:identity-service
+- - neutron-api:neutron-api
+  - nova-cloud-controller:neutron-api
+- - heat:amqp
+  - rabbitmq-server:amqp
+- - heat:identity-service
+  - keystone:identity-service
+- - keystone:shared-db
+  - keystone-mysql-router:shared-db
+- - glance:shared-db
+  - glance-mysql-router:shared-db
+- - nova-cloud-controller:shared-db
+  - nova-mysql-router:shared-db
+- - neutron-api:shared-db
+  - neutron-mysql-router:shared-db
+- - openstack-dashboard:shared-db
+  - dashboard-mysql-router:shared-db
+- - heat:shared-db
+  - heat-mysql-router:shared-db
+- - placement:shared-db
+  - placement-mysql-router:shared-db
+- - nova-compute:amqp
+  - rabbitmq-server:amqp
+- - nova-compute:image-service
+  - glance:image-service
+- - nova-cloud-controller:cloud-compute
+  - nova-compute:cloud-compute

@@ -34,7 +34,8 @@ declare -A OS_VARIANTS=( ['CENTOS7']='rhel7' \
                          ['RHEL82']='rhel8.0' \
                          ['RHEL84']='rhel8.0' \
                          ['UBUNTU16']='ubuntu16.04' \
-                         ['UBUNTU18']='ubuntu18.04' )
+                         ['UBUNTU18']='ubuntu18.04' \ 
+                         ['UBUNTU22']='ubuntu22.04')
 
 declare -A OS_IMAGES=( ['CENTOS7']='centos7' \
                        ['CENTOS8']='centos8' \
@@ -42,7 +43,8 @@ declare -A OS_IMAGES=( ['CENTOS7']='centos7' \
                        ['RHEL82']='rhel-8.2-x86_64-kvm.qcow2' \
                        ['RHEL84']='rhel-8.4-x86_64-kvm.qcow2' \
                        ['UBUNTU16']='ubuntu16' \
-                       ['UBUNTU18']='ubuntu18' )
+                       ['UBUNTU18']='ubuntu18' \
+                       ['UBUNTU22']='ubuntu22')
 
 declare -A OS_IMAGE_USERS=( ['CENTOS7']='centos' \
                             ['CENTOS8']='centos' \
@@ -50,7 +52,8 @@ declare -A OS_IMAGE_USERS=( ['CENTOS7']='centos' \
                             ['RHEL82']='stack' \
                             ['RHEL84']='stack' \
                             ['UBUNTU16']='ubuntu' \
-                            ['UBUNTU18']='ubuntu' )
+                            ['UBUNTU18']='ubuntu' \
+                            ['UBUNTU22']='ubuntu')
 
 declare -A OS_IMAGES_UP=( ['CENTOS7']='centos' \
                           ['CENTOS8']='centos' \
@@ -58,7 +61,8 @@ declare -A OS_IMAGES_UP=( ['CENTOS7']='centos' \
                           ['RHEL82']='' \
                           ['RHEL84']='' \
                           ['UBUNTU16']='ubuntu' \
-                          ['UBUNTU18']='ubuntu' )
+                          ['UBUNTU18']='ubuntu' \
+                          ['UBUNTU22']='ubuntu' )
 
 declare -A OS_IMAGES_DOWN=( ['CENTOS7']='' \
                             ['CENTOS8']='' \
@@ -66,4 +70,5 @@ declare -A OS_IMAGES_DOWN=( ['CENTOS7']='' \
                             ['RHEL82']='' \
                             ['RHEL84']='' \
                             ['UBUNTU16']='' \
-                            ['UBUNTU18']='' )
+                            ['UBUNTU18']='' \
+                            ['UBUNTU22']='' )
