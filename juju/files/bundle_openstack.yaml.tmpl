@@ -296,6 +296,8 @@ services:
 {%- else %}
     num_units: {{ all_nodes | count }}
 {%- endif %}
+    channel: stable
+    revision: 24
     to: {{ all_nodes }}
   ntp:
     charm: "ntp"
