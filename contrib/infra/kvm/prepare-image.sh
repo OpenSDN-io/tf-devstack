@@ -22,10 +22,10 @@ fi
 echo "INFO: downloading image"
 case $OS in
   ubuntu)
-    SERIES=${SERIES:-bionic}
-    if [[ "$SERIES" == 'bionic' ]]; then
-      BASE_IMAGE_NAME="ubuntu18"
-      name='bionic-server-cloudimg-amd64.img'
+    SERIES=${SERIES:-jammy}
+    if [[ "$SERIES" == 'jammy' ]]; then
+      BASE_IMAGE_NAME="ubuntu22"
+      name='jammy-server-cloudimg-amd64.img'
     else
       echo "ERROR: unsupported series $SERIES"
       exit 1
