@@ -70,14 +70,14 @@ function machines() {
     elif [ "$DISTRO" == "ubuntu" ]; then
         export DEBIAN_FRONTEND=noninteractive
         sudo -E apt-get update -y
-        sudo -E apt-get install -y python3-setuptools python3-distutils iproute2 python3-cryptography jq dnsutils chrony python3-pip
+        sudo -E apt-get install -y curl python3-setuptools python3-distutils iproute2 python3-cryptography jq dnsutils chrony python3-pip
         # required for old versions of kolla where shebang is python
         if [[ "$DISTRO_VERSION_ID" = "20.04" || "$DISTRO_VERSION_ID" = "22.04" ]]; then
             sudo -E ln -sf /usr/bin/python3 /usr/bin/python
         fi
     elif [[ "$DISTRO" == "rocky" ]]; then
         sudo dnf check-update || true
-        sudo dnf install -y python3 python3-setuptools libselinux-python3 iproute jq bind-utils python3-pip
+        sudo dnf install -y curl python3 python3-setuptools libselinux-python3 iproute jq bind-utils python3-pip
     else
         echo "Unsupported OS version"
         exit 1
