@@ -24,12 +24,6 @@ export NODE_IP=`ip addr show dev $PHYS_INT | grep 'inet ' | awk '{print $2}' | h
 export NODE_CIDR=`ip r | grep -E "[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+/[0-9]+ dev $PHYS_INT " | awk '{print $1}'`
 export SSH_USER=${SSH_USER:-${IMAGE_SSH_USER:-$(whoami)}}
 
-if [[ "$DISTRO" == "rhel" ]]; then
-  declare -A _default_rhel_version=( ['7.9']='rhel7.9' ['8.2']='rhel8.2' ['8.4']='rhel8.4' )
-  export RHEL_VERSION=${_default_rhel_version[$DISTRO_VERSION_ID]}
-  export RHEL_MAJOR_VERSION=$(echo $RHEL_VERSION | cut -d '.' -f1)
-fi
-
 # defaults
 
 # run build tf
@@ -87,11 +81,6 @@ fi
 
 trap 'trap_exit' EXIT
 function trap_exit() {
-  if [[ "$DEPLOYER" == 'helm' ]]; then
-    # TODO: check what happens in helm and why it's failed in case of killing
-    echo "INFO: skippimg kill&wait for children processes for helm"
-    return
-  fi
   local childs=$(jobs -p)
   echo "DEBUG: kill running child jobs: $childs"
   local p

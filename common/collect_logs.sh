@@ -399,10 +399,6 @@ function collect_kubernetes_objects_info() {
     local resource
     local resources="pod daemonset.apps deployment.apps replicaset.apps statefulset.apps configmaps endpoints"
     resources+=" persistentvolumeclaims secrets serviceaccounts services jobs"
-    if [[ "$DEPLOYER" == "operator" || "$DEPLOYER" == "openshift" ]]; then
-        resources+=" manager analytics analyticsalarm analyticssnmp cassandra config control kubemanager queryengine"
-        resources+=" rabbitmq redis vrouter webui zookeeper"
-    fi
     local namespace=''
     local namespaces=$($tool get namespaces -o name | awk -F '/' '{ print $2 }')
     for namespace in $namespaces ; do
@@ -560,7 +556,7 @@ function collect_core_dumps() {
 
     if ! command -v gdb &> /dev/null; then
         local distro=$(cat /etc/*release | egrep '^ID=' | awk -F= '{print $2}' | tr -d \")
-        if [[ "$distro" == "centos" || "$distro" == "rhel" || "$distro" == "rocky9" ]]; then
+        if [[ "$distro" == "centos" || "$distro" == "rocky9" ]]; then
             sudo yum install -y gdb
         elif [ "$distro" == "ubuntu" ]; then
             export DEBIAN_FRONTEND=noninteractive

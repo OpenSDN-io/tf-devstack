@@ -9,9 +9,7 @@ Possible deployment methods are:
 
 - [k8s manifests](https://github.com/opensdn-io/tf-devstack/tree/master/k8s_manifests)
 - [ansible](https://github.com/opensdn-io/tf-devstack/tree/master/ansible)
-- [helm](https://github.com/opensdn-io/tf-devstack/tree/master/helm)
 - [juju](https://github.com/opensdn-io/tf-devstack/tree/master/juju)
-- [rhosp](https://github.com/opensdn-io/tf-devstack/tree/master/rhosp)
 
 Please see particular deployment method readmes for details.
 

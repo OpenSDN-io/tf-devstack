@@ -1,5 +1,0 @@
-resource_registry:
-  # to enable root password for debugs via console (if no ssh available)
-  OS::TripleO::NodeUserData: firstboot_userdata.yaml
-
-parameter_defaults:

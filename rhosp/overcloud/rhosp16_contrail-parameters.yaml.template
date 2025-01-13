@@ -1,6 +1,0 @@
-resource_registry:
-  # to enable root password for debugs via console (if no ssh available)
-  OS::TripleO::NodeUserData: tripleo-heat-templates/firstboot/userdata_root_password.yaml
-
-parameter_defaults:
-  NovaSchedulerQueryImageType: false

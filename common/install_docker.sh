@@ -31,15 +31,6 @@ function install_docker_centos() {
   sudo systemctl stop firewalld || true
 }
 
-function install_docker_rhel() {
-  sudo subscription-manager repos \
-    --enable rhel-7-server-extras-rpms \
-    --enable rhel-7-server-optional-rpms
-  sudo yum install -y docker device-mapper-libs device-mapper-event-libs
-  sudo systemctl start docker
-  sudo systemctl stop firewalld || true
-}
-
 echo
 echo '[docker install]'
 echo $DISTRO detected

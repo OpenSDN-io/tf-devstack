@@ -59,14 +59,8 @@ function build() {
 function machines() {
     # install required packages
 
-    echo "$DISTRO detected"
-    if [[ "$DISTRO" == "rhel" && "$DISTRO_VERSION_ID" =~ ^8\. ]]; then
-        sudo yum -y install https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
-    fi
-    if [[ "$DISTRO" == "centos" || "$DISTRO" == "rhel" ]]; then
-        echo "ERROR: RedHat/CentOS OS-es are not supported more"
-        exit 1
-    elif [ "$DISTRO" == "ubuntu" ]; then
+    echo "INFO: $DISTRO detected"
+    if [ "$DISTRO" == "ubuntu" ]; then
         export DEBIAN_FRONTEND=noninteractive
         sudo -E apt-get update -y
         sudo -E apt-get install -y curl python3-setuptools python3-distutils iproute2 python3-cryptography jq dnsutils chrony python3-pip
@@ -79,7 +73,7 @@ function machines() {
         # curl is upgrading below and leads to upgrade of openssl. but also we have to upgrade openssh
         sudo dnf install -y curl python3 python3-setuptools libselinux-python3 iproute jq bind-utils python3-pip openssh-server openssh-clients
     else
-        echo "Unsupported OS version"
+        echo "Unsupported OS version - $DISTRO"
         exit 1
     fi
 

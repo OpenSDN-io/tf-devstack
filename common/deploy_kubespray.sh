@@ -176,13 +176,6 @@ cat inventory/mycluster/hosts.yml
 
 set_env_var "kube_network_plugin" "$CNI" $cluster_vars
 
-if [[ "${ORCHESTRATOR}" == "helm" ]]; then
-  set_env_var 'helm_enabled' true $cluster_vars
-  # TODO: use different version for kubespray release != 2.14
-  set_env_var 'helm_version' 'v2.16.11' $cluster_vars
-  set_env_var 'helm_stable_repo_url' 'https://charts.helm.sh/stable' $cluster_vars '|'
-fi
-
 # DNS
 
 # Allow host and hostnet pods to resolve cluster domains

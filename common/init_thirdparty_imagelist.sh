@@ -79,12 +79,6 @@ EOF
     ansible-playbook -i inventory/local/hosts.ini -e downloads_file=$listfile get_imagelist.yml || /bin/true
 }
 
-function get_images_for_helm() {
-    touch $listfile
-    echo "quay.io/airshipit/kubernetes-entrypoint:v1.0.0" >> $listfile
-}
-
 rm -f $listfile
 
 get_images_from_kubespray
-get_images_for_helm
