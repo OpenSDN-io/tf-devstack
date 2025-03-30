@@ -167,7 +167,7 @@ function tf() {
 
     sudo -E env PATH=$PATH:/usr/local/bin ansible-playbook -v -e orchestrator=$ORCHESTRATOR \
         -e config_file=$tf_deployer_dir/instances.yaml \
-        $tf_deployer_dir/playbooks/install_contrail.yml
+        $tf_deployer_dir/playbooks/install_opensdn.yml
 
     if [[ "$ORCHESTRATOR" == "openstack" && "$KOLLA_MODE" == "vanilla" ]]; then
         sudo -E PATH=$PATH:/usr/local/bin ansible-playbook -v -e orchestrator=$ORCHESTRATOR \

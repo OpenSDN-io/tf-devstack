@@ -89,7 +89,7 @@ Individual stages:
 - k8s - kubernetes is deployed (unless ORCHESTRATOR=openstack)
 - openstack - openstack is deployed (unless ORCHESTRATOR=kubernetes)
 - tf - TF is deployed
-- wait - wait until contrail-status verifies that all components are active
+- wait - wait until opensdn-status verifies that all components are active
 
 ## Details
 
