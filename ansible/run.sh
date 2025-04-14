@@ -165,9 +165,13 @@ function tf() {
         fi
     fi
 
+    local opensdn_playbook="$tf_deployer_dir/playbooks/install_opensdn.yml"
+    if [ ! -f "$opensdn_playbook" ]; then
+        opensdn_playbook="$tf_deployer_dir/playbooks/install_contrail.yml"
+    fi
     sudo -E env PATH=$PATH:/usr/local/bin ansible-playbook -v -e orchestrator=$ORCHESTRATOR \
         -e config_file=$tf_deployer_dir/instances.yaml \
-        $tf_deployer_dir/playbooks/install_opensdn.yml
+        "$opensdn_playbook"
 
     if [[ "$ORCHESTRATOR" == "openstack" && "$KOLLA_MODE" == "vanilla" ]]; then
         sudo -E PATH=$PATH:/usr/local/bin ansible-playbook -v -e orchestrator=$ORCHESTRATOR \
