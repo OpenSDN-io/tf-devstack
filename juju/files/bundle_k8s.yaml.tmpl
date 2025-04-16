@@ -37,14 +37,14 @@ services:
 
   easyrsa:
     series: "{{ UBUNTU_SERIES }}"
-    charm: cs:~containers/easyrsa-408
+    charm: cs:~containers/easyrsa-441
     num_units: 1
     to:
     - 0
 
   etcd:
     series: "{{ UBUNTU_SERIES }}"
-    charm: cs:~containers/etcd-622
+    charm: cs:~containers/etcd-655
     num_units: {{ controller_nodes | count }}
     options:
       channel: auto
@@ -52,7 +52,7 @@ services:
 
   kubernetes-master:
     series: "{{ UBUNTU_SERIES }}"
-    charm: cs:~containers/kubernetes-master-1051
+    charm: cs:~containers/kubernetes-master-1106
     num_units: {{ controller_nodes | count }}
     expose: true
     options:
@@ -68,7 +68,7 @@ services:
 
   kubernetes-worker:
     series: "{{ UBUNTU_SERIES }}"
-    charm: cs:~containers/kubernetes-worker-801
+    charm: cs:~containers/kubernetes-worker-838
     num_units: {{ agent_nodes | count }}
     options:
       ingress: false
@@ -78,7 +78,7 @@ services:
 
   containerd:
     series: "{{ UBUNTU_SERIES }}"
-    charm: cs:~containers/containerd-146
+    charm: cs:~containers/containerd-200
 
 {%- if ENABLE_NAGIOS == 'true' and '20.' not in DISTRO_VERSION_ID %}
   nagios:
