@@ -81,7 +81,7 @@ EOF
 
 function setup_keystone_auth() {
   echo "INFO: setup keystone auth for hybrid mode"
-  command juju config kubernetes-master \
+  command juju config kubernetes-control-plane \
       authorization-mode="Node,RBAC" \
       enable-keystone-authorization=true \
       keystone-policy="$(cat $my_dir/files/k8s_policy.yaml)"
@@ -183,7 +183,7 @@ function is_ready() {
   local max_errors=10
   # nova-compute just for checking
   # https://bugs.launchpad.net/charm-nova-compute/+bug/1934123
-  local allowed_not_active="neutron-api nova-compute kubernetes-master kubernetes-worker ironic-conductor mysql-innodb-cluster"
+  local allowed_not_active="neutron-api nova-compute kubernetes-control-plane kubernetes-master kubernetes-worker ironic-conductor mysql-innodb-cluster"
 
   # TODO: rework to jq
   # juju status --format json | jq -r '.applications[] | ."charm-name" + " " +  ."application-status".current'
@@ -231,13 +231,13 @@ function check_kubernetes_master_cert() {
   fi
   if sudo grep -q "fake-name" /root/cdk/server.crt ; then
     # only if cert doesn't have specific server's IP
-    command juju run-action --wait kubernetes-master/leader restart
+    command juju run-action --wait kubernetes-control-plane/leader restart
     return 0
   fi
 
   # change setting
-  if ! command juju config kubernetes-master extra_sans | grep -q 'fake-name' ; then
-    command juju config kubernetes-master extra_sans='fake-name'
+  if ! command juju config kubernetes-control-plane extra_sans | grep -q 'fake-name' ; then
+    command juju config kubernetes-control-plane extra_sans='fake-name'
     # wait a bit to let hook run. then return back to wait loop
     sleep 10
   fi

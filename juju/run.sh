@@ -247,19 +247,19 @@ function tf() {
         fi
     fi
     if [[ $ORCHESTRATOR == 'kubernetes' || $ORCHESTRATOR == 'hybrid' ]] ; then
-        command juju add-relation tf-kubernetes-node:cni kubernetes-master:cni
+        command juju add-relation tf-kubernetes-node:cni kubernetes-control-plane:cni
         command juju add-relation tf-kubernetes-node:cni kubernetes-worker:cni
-        command juju add-relation tf-kubernetes-master:kube-api-endpoint kubernetes-master:kube-api-endpoint
+        command juju add-relation tf-kubernetes-master:kube-api-endpoint kubernetes-control-plane:kube-api-endpoint
         command juju add-relation tf-agent:juju-info kubernetes-worker:juju-info
         if [[ ${ENABLE_NAGIOS,,} == 'true' ]] ; then
             # add nrpe relation to superior of tf-agent and contail-kubernetes-master
-            command juju add-relation kubernetes-master nrpe
+            command juju add-relation kubernetes-control-plane nrpe
             command juju add-relation kubernetes-worker nrpe
         fi
     fi
     if [[ $ORCHESTRATOR == 'hybrid' ]] ; then
-        command juju add-relation kubernetes-master keystone
-        command juju add-relation kubernetes-master tf-agent
+        command juju add-relation kubernetes-control-plane keystone
+        command juju add-relation kubernetes-control-plane tf-agent
         setup_keystone_auth
     fi
 

@@ -1,3 +1,5 @@
+# from https://github.com/charmed-kubernetes/bundle/blob/main/releases/1.24/bundle.yaml
+
 machines:
 {%- set controllers_count = CONTROLLER_NODES.split()|length %}
 {%- if AGENT_NODES|string == NODE_IP|string %}
@@ -37,48 +39,60 @@ services:
 
   easyrsa:
     series: "{{ UBUNTU_SERIES }}"
-    charm: cs:~containers/easyrsa-441
+    channel: 1.24/stable
+    charm: easyrsa
     num_units: 1
     to:
     - 0
 
   etcd:
     series: "{{ UBUNTU_SERIES }}"
-    charm: cs:~containers/etcd-655
+    channel: 1.24/stable
+    charm: etcd
     num_units: {{ controller_nodes | count }}
     options:
-      channel: auto
+      channel: 3.4/stable
     to: {{ controller_nodes }}
 
-  kubernetes-master:
+#  kubeapi-load-balancer:
+#    series: "{{ UBUNTU_SERIES }}"
+#    channel: 1.24/stable
+#    charm: kubeapi-load-balancer
+#    num_units: 1
+#    to:
+#    - 0
+  kubernetes-control-plane:
     series: "{{ UBUNTU_SERIES }}"
-    charm: cs:~containers/kubernetes-master-1106
-    num_units: {{ controller_nodes | count }}
+    channel: 1.24/stable
+    charm: kubernetes-control-plane
     expose: true
+    num_units: {{ controller_nodes | count }}
     options:
+      channel: '{{ k8s_channel }}'
       enable-metrics: false
       enable-dashboard-addons: false
-      channel: '{{ k8s_channel }}'
       service-cidr: '10.96.0.0/12'
       snapd_refresh: 'max'
 {%- if ORCHESTRATOR == 'kubernetes' %}
       authorization-mode: 'AlwaysAllow'
 {%- endif %}
     to: {{ controller_nodes }}
-
   kubernetes-worker:
     series: "{{ UBUNTU_SERIES }}"
-    charm: cs:~containers/kubernetes-worker-838
+    channel: 1.24/stable
+    charm: kubernetes-worker
+    expose: true
     num_units: {{ agent_nodes | count }}
     options:
-      ingress: false
       channel: '{{ k8s_channel }}'
+      ingress: false
       snapd_refresh: 'max'
     to: {{ agent_nodes }}
 
   containerd:
     series: "{{ UBUNTU_SERIES }}"
-    charm: cs:~containers/containerd-200
+    channel: 1.24/stable
+    charm: containerd
 
 {%- if ENABLE_NAGIOS == 'true' and '20.' not in DISTRO_VERSION_ID %}
   nagios:
@@ -113,14 +127,26 @@ services:
 
 relations:
 
-- [ kubernetes-master:kube-api-endpoint, kubernetes-worker:kube-api-endpoint ]
-- [ kubernetes-master:kube-control, kubernetes-worker:kube-control ]
-- [ kubernetes-master:certificates, easyrsa:client ]
-- [ kubernetes-master:etcd, etcd:db ]
-- [ kubernetes-worker:certificates,  easyrsa:client ]
-- [ etcd:certificates, easyrsa:client ]
-- [ kubernetes-master:container-runtime, containerd:containerd]
-- [ kubernetes-worker:container-runtime, containerd:containerd]
+#- - kubernetes-control-plane:loadbalancer-external
+#  - kubeapi-load-balancer:lb-consumers
+#- - kubernetes-control-plane:loadbalancer-internal
+#  - kubeapi-load-balancer:lb-consumers
+- - kubernetes-control-plane:kube-control
+  - kubernetes-worker:kube-control
+- - kubernetes-control-plane:certificates
+  - easyrsa:client
+- - etcd:certificates
+  - easyrsa:client
+- - kubernetes-control-plane:etcd
+  - etcd:db
+- - kubernetes-worker:certificates
+  - easyrsa:client
+#- - kubeapi-load-balancer:certificates
+#  - easyrsa:client
+- - containerd:containerd
+  - kubernetes-worker:container-runtime
+- - containerd:containerd
+  - kubernetes-control-plane:container-runtime
 
 {%- if ENABLE_NAGIOS == 'true' and '20.' not in DISTRO_VERSION_ID %}
 - [ nrpe:monitors, nagios:monitors ]
