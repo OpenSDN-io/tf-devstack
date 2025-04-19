@@ -60,18 +60,19 @@ function machines() {
     # install required packages
 
     echo "INFO: $DISTRO detected"
-    if [ "$DISTRO" == "ubuntu" ]; then
+    if [[ "$DISTRO" == "ubuntu" ]]; then
         export DEBIAN_FRONTEND=noninteractive
         sudo -E apt-get update -y
-        sudo -E apt-get install -y curl python3-setuptools python3-distutils iproute2 python3-cryptography jq dnsutils chrony python3-pip
-        # required for old versions of kolla where shebang is python
+        sudo -E apt-get install -y curl python3-setuptools iproute2 python3-cryptography jq dnsutils chrony python3-pip python3-virtualenv
         if [[ "$DISTRO_VERSION_ID" = "20.04" || "$DISTRO_VERSION_ID" = "22.04" ]]; then
+            sudo -E apt-get install -y curl python3-distutils
+            # required for old versions of kolla where shebang is python
             sudo -E ln -sf /usr/bin/python3 /usr/bin/python
         fi
     elif [[ "$DISTRO" == "rocky" ]]; then
         sudo dnf check-update || true
         # curl is upgrading below and leads to upgrade of openssl. but also we have to upgrade openssh
-        sudo dnf install -y curl python3 python3-setuptools libselinux-python3 iproute jq bind-utils python3-pip openssh-server openssh-clients
+        sudo dnf install -y curl python3 python3-setuptools libselinux-python3 iproute jq bind-utils python3-pip openssh-server openssh-clients python3-virtualenv
     else
         echo "Unsupported OS version - $DISTRO"
         exit 1
@@ -80,12 +81,21 @@ function machines() {
     ansible_pkg="ansible<3"
     if [[ ${OPENSTACK_VERSION:0:4} == '2023' ]]; then
         ansible_pkg="ansible<8"
-    elif [[ ${OPENSTACK_VERSION:0:1} > 'x' ]]; then
+    elif [[ ${OPENSTACK_VERSION:0:1} > 'x' || "$ORCHESTRATOR" == "kubernetes" ]]; then
         ansible_pkg="ansible<6"
     fi
 
+    if [[ "$DISTRO" == "ubuntu" && "$DISTRO_VERSION_ID" == "24.04" ]]; then
+        # it has python 3.12 which is supported in ansible >=9
+        # TODO: check openstack_version and exit with error if unsupported for 24.04
+        ansible_pkg="ansible>=9,<10"
+    fi
+
+    virtualenv $HOME/.venv
+    source $HOME/.venv/bin/activate
+
     # jinja is reqiured to create some configs
-    sudo LANG=en_US.UTF-8 LC_ALL=en_US.UTF-8 python3 -m pip install --upgrade "$ansible_pkg" 'jinja2==3.0.3' pyopenssl
+    LANG=en_US.UTF-8 LC_ALL=en_US.UTF-8 python3 -m pip install --upgrade "$ansible_pkg" 'jinja2==3.0.3' pyopenssl requests
 
     set_ssh_keys
 
@@ -106,12 +116,11 @@ function machines() {
         sudo ln -sf /run/systemd/resolve/resolv.conf /etc/resolv.conf
     fi
 
-
     # create Ansible temporary dir under current user to avoid create it under root
     ansible -m "copy" --args="content=c dest='/tmp/rekjreekrbjrekj.txt'" localhost
     rm -rf /tmp/rekjreekrbjrekj.txt
 
-    sudo -E env "PATH=$PATH:/usr/local/bin" ansible-playbook -v -e orchestrator=$ORCHESTRATOR \
+    ansible-playbook -v -e orchestrator=$ORCHESTRATOR \
         -e config_file=$tf_deployer_dir/instances.yaml \
         $tf_deployer_dir/playbooks/configure_instances.yml
     if [[ $? != 0 ]] ; then
@@ -124,7 +133,8 @@ function k8s() {
     if [[ "$ORCHESTRATOR" != "kubernetes" ]]; then
         echo "INFO: Skipping k8s deployment"
     else
-        sudo -E env PATH=$PATH:/usr/local/bin ansible-playbook -v -e orchestrator=$ORCHESTRATOR \
+        source $HOME/.venv/bin/activate
+        ansible-playbook -v -e orchestrator=$ORCHESTRATOR \
             -e config_file=$tf_deployer_dir/instances.yaml \
             $tf_deployer_dir/playbooks/install_k8s.yml
     fi
@@ -133,32 +143,41 @@ function k8s() {
 function openstack() {
     if [[ "$ORCHESTRATOR" != "openstack" ]]; then
         echo "INFO: Skipping openstack deployment"
-    elif [[ "$KOLLA_MODE" == "vanilla" ]]; then
-        sudo -E env PATH=$PATH:/usr/local/bin ansible-playbook -v -e orchestrator=$ORCHESTRATOR \
+        return
+    fi
+
+    sudo mkdir -p /etc/kolla
+    sudo chown -R $(id -u):$(id -g) /etc/kolla
+
+    if [[ "$KOLLA_MODE" == "vanilla" ]]; then
+        source $HOME/.venv/bin/activate
+        ansible-playbook -v -e orchestrator=$ORCHESTRATOR \
             -e config_file=$tf_deployer_dir/instances.yaml \
             $tf_deployer_dir/playbooks/install_vanilla_openstack.yml
     else
-        sudo -E env PATH=$PATH:/usr/local/bin ansible-playbook -v -e orchestrator=$ORCHESTRATOR \
+        source $HOME/.venv/bin/activate
+        ansible-playbook -v -e orchestrator=$ORCHESTRATOR \
             -e config_file=$tf_deployer_dir/instances.yaml \
             $tf_deployer_dir/playbooks/install_openstack.yml
     fi
 }
 
-
 function tf() {
     current_container_tag=$(cat $tf_deployer_dir/instances.yaml | python3 -c "import yaml, sys ; data = yaml.safe_load(sys.stdin.read()); print(data['contrail_configuration']['CONTRAIL_CONTAINER_TAG'])")
     current_registry=$(cat $tf_deployer_dir/instances.yaml | python3 -c "import yaml, sys ; data = yaml.safe_load(sys.stdin.read()); print(data['global_configuration']['CONTAINER_REGISTRY'])")
+
+    source $HOME/.venv/bin/activate
 
     if [[ $current_container_tag != $CONTRAIL_CONTAINER_TAG || $current_registry != $CONTAINER_REGISTRY ]]; then
         # generate new inventory file due to possible new input
         python3 $my_dir/../common/jinja2_render.py < $my_dir/files/instances.yaml.j2 > $tf_deployer_dir/instances.yaml
 
-        sudo -E PATH=$PATH:/usr/local/bin ansible-playbook -v -e orchestrator=$ORCHESTRATOR \
-        -e config_file=$tf_deployer_dir/instances.yaml \
-        $tf_deployer_dir/playbooks/configure_instances.yml
+        ansible-playbook -v -e orchestrator=$ORCHESTRATOR \
+            -e config_file=$tf_deployer_dir/instances.yaml \
+            $tf_deployer_dir/playbooks/configure_instances.yml
 
         if [[ "$ORCHESTRATOR" == "openstack" && "$KOLLA_MODE" != "vanilla" ]]; then
-            sudo -E PATH=$PATH:/usr/local/bin ansible-playbook -v -e orchestrator=$ORCHESTRATOR \
+            ansible-playbook -v -e orchestrator=$ORCHESTRATOR \
                 -e config_file=$tf_deployer_dir/instances.yaml \
                 $tf_deployer_dir/playbooks/install_openstack.yml \
                 --tags "nova,neutron,heat"
@@ -169,12 +188,12 @@ function tf() {
     if [ ! -f "$opensdn_playbook" ]; then
         opensdn_playbook="$tf_deployer_dir/playbooks/install_contrail.yml"
     fi
-    sudo -E env PATH=$PATH:/usr/local/bin ansible-playbook -v -e orchestrator=$ORCHESTRATOR \
+    ansible-playbook -v -e orchestrator=$ORCHESTRATOR \
         -e config_file=$tf_deployer_dir/instances.yaml \
         "$opensdn_playbook"
 
     if [[ "$ORCHESTRATOR" == "openstack" && "$KOLLA_MODE" == "vanilla" ]]; then
-        sudo -E PATH=$PATH:/usr/local/bin ansible-playbook -v -e orchestrator=$ORCHESTRATOR \
+        ansible-playbook -v -e orchestrator=$ORCHESTRATOR \
             -e config_file=$tf_deployer_dir/instances.yaml \
             $tf_deployer_dir/playbooks/config_openstack.yml
     fi
