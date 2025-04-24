@@ -70,6 +70,10 @@ function k8s() {
 
 function manifest() {
     fetch_deployer_no_docker $deployer_image $deployer_dir || old_k8s_fetch_deployer
+
+    # we have to remove saved common.env from build stage
+    rm $deployer_dir/common.env
+
     CONTRAIL_REGISTRY=$CONTAINER_REGISTRY \
     CONTRAIL_CONTAINER_TAG=$CONTRAIL_CONTAINER_TAG \
     HOST_IP=$NODE_IP \
