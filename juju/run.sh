@@ -12,7 +12,7 @@ source "$my_dir/../common/stages.sh"
 source "$my_dir/../common/collect_logs.sh"
 source "$my_dir/functions.sh"
 
-tf_charms_image=tf-charms-src
+tf_charms_image=opensdn-charms-src
 
 init_output_logging
 

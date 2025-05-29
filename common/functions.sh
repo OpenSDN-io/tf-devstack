@@ -15,6 +15,7 @@ function ensure_kube_api_ready() {
 #  - deployer image
 #  - directory path deployer have to be extracted to
 function fetch_deployer() {
+  echo "INFO: fetch deployer with docker"
   if [[ $# != 2 ]] ; then
     echo "ERROR: Deployer image name and path to deployer directory are required for fetch_deployer"
     return 1
@@ -27,13 +28,29 @@ function fetch_deployer() {
 
   local image="$DEPLOYER_CONTAINER_REGISTRY/$deployer_image"
   [ -n "$CONTRAIL_DEPLOYER_CONTAINER_TAG" ] && image+=":$CONTRAIL_DEPLOYER_CONTAINER_TAG"
-  sudo docker create --name $deployer_image --entrypoint /bin/true $image || return 1
+  if ! sudo docker create --name $deployer_image --entrypoint /bin/true $image ; then
+    sudo docker rm -f $deployer_image || /bin/true
+    if [[ ${deployer_image:0:7} == 'opensdn' ]]; then
+      # if opensdn-* is not found then try to download tf-*
+      deployer_image=$(echo $deployer_image | sed 's/^opensdn/tf/')
+      image="$DEPLOYER_CONTAINER_REGISTRY/$deployer_image"
+      [ -n "$CONTRAIL_DEPLOYER_CONTAINER_TAG" ] && image+=":$CONTRAIL_DEPLOYER_CONTAINER_TAG"
+      if ! sudo docker create --name $deployer_image --entrypoint /bin/true $image ; then
+        echo "ERROR: Image could not be downloaded."
+        return 1
+      fi
+    else
+      echo "ERROR: Image could not be downloaded."
+      return 1
+    fi
+  fi
   sudo docker cp $deployer_image:/src $deployer_dir
   sudo docker rm -fv $deployer_image
   sudo chown -R $UID $deployer_dir
 }
 
 function fetch_deployer_no_docker() {
+  echo "INFO: fetch deployer without docker"
   if [[ $# != 2 ]] ; then
     echo "ERROR: Deployer image name and path to deployer directory are required for fetch_deployer"
     return 1
@@ -43,8 +60,17 @@ function fetch_deployer_no_docker() {
   local tmp_deployer_layers_dir="$(mktemp -d)"
   local archive_tmp_dir="$(mktemp -d)"
   if ! ${fmy_dir}/download-frozen-image-v2.sh $tmp_deployer_layers_dir ${deployer_image}:${CONTRAIL_DEPLOYER_CONTAINER_TAG} ; then
-    echo "ERROR: Image could not be downloaded."
-    return 1
+    if [[ ${deployer_image:0:7} == 'opensdn' ]]; then
+      # if opensdn-* is not found then try to download tf-*
+      deployer_image=$(echo $deployer_image | sed 's/^opensdn/tf/')
+      if ! ${fmy_dir}/download-frozen-image-v2.sh $tmp_deployer_layers_dir ${deployer_image}:${CONTRAIL_DEPLOYER_CONTAINER_TAG} ; then
+        echo "ERROR: Image could not be downloaded."
+        return 1
+      fi
+    else
+      echo "ERROR: Image could not be downloaded."
+      return 1
+    fi
   fi
   tar xf ${tmp_deployer_layers_dir}/$(cat ${tmp_deployer_layers_dir}/manifest.json | jq --raw-output '.[0].Layers[0]') -C ${archive_tmp_dir}
   sudo rm -rf $deployer_dir

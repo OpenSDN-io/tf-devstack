@@ -23,7 +23,7 @@ declare -A STAGES=( \
 export DEPLOYER='k8s_manifests'
 # max wait in seconds after deployment
 export WAIT_TIMEOUT=1500
-deployer_image=tf-container-builder-src
+deployer_image=opensdn-container-builder-src
 deployer_dir=${WORKSPACE}/tf-container-builder
 AGENT_LABEL="node-role.opencontrail.org/agent="
 
