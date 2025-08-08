@@ -394,6 +394,7 @@ services:
       - "4"
   ntp:
     charm: "ntp"
+    series: "{{ UBUNTU_SERIES }}"
 {%- if NTP_SERVERS %}
     options:
       source: "{{ NTP_SERVERS }}"

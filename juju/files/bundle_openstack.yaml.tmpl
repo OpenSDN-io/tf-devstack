@@ -302,6 +302,7 @@ services:
     to: {{ all_nodes }}
   ntp:
     charm: "ntp"
+    series: "{{ UBUNTU_SERIES }}"
 {%- if NTP_SERVERS %}
     options:
       source: "{{ NTP_SERVERS }}"
