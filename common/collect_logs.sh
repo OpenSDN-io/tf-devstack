@@ -507,6 +507,8 @@ function collect_docker_service_statuses() {
     mkdir -p $log_dir
 
     # Cassandra
+    # set rmiURLParsing=legacy to work with rocky9
+    export JAVA_TOOL_OPTIONS="$JAVA_TOOL_OPTIONS -Dcom.sun.jndi.rmiURLParsing=legacy"
     local command=" \
         echo 'Port 7200:'; nodetool -p 7200 status; nodetool -p 7200 describecluster; \
         echo 'Port 7201:'; nodetool -p 7201 status; nodetool -p 7201 describecluster"
