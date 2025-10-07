@@ -205,6 +205,8 @@ services:
 {%- if SSL_ENABLE.lower() == 'true' %}
   easyrsa:
     # this must be one in HA
+    series: "{{ UBUNTU_SERIES }}"
+    channel: 1.24/stable
     charm: easyrsa
     num_units: 1
     to:
