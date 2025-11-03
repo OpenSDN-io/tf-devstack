@@ -79,7 +79,9 @@ function machines() {
     fi
 
     ansible_pkg="ansible<3"
-    if [[ ${OPENSTACK_VERSION:0:4} == '2023' ]]; then
+    if [[ ${OPENSTACK_VERSION:0:6} == '2024.2' ]]; then
+        ansible_pkg="ansible<10"
+    elif [[ ${OPENSTACK_VERSION:0:4} == '2023' || ${OPENSTACK_VERSION:0:4} == '2024' ]]; then
         ansible_pkg="ansible<8"
     elif [[ ${OPENSTACK_VERSION:0:1} > 'x' || "$ORCHESTRATOR" == "kubernetes" ]]; then
         ansible_pkg="ansible<6"
