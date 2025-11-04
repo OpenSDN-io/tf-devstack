@@ -40,7 +40,7 @@ export AUTH_PASSWORD='contrail123'
 export VIRT_TYPE=qemu
 
 export KOLLA_BASE_DISTRO="centos"
-if [[ "$OPENSTACK_VERSION" == "zed" || "$OPENSTACK_VERSION" == "2023.1" || "$OPENSTACK_VERSION" == "2023.2" ]]; then
+if [[ "$OPENSTACK_VERSION" == "zed" || "${OPENSTACK_VERSION:0:3}" == "202" ]]; then
   export KOLLA_BASE_DISTRO="rocky"
 fi
 
