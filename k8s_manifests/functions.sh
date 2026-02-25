@@ -5,6 +5,17 @@
 # - fetch_deployer - function fetch deployer src container using docker. Needs docker to be installed on host
 # - old_XXX_fetch_deployer - deprecated deployer method saved for backward compatibility. Will be removed in the future.
 
+function install_kernel_devel_node() {
+    local ip=$1
+    local script_path="${my_dir:-$(dirname "$(readlink -e "${BASH_SOURCE[0]}")")}/install_kernel_devel_node.sh"
+
+    scp -q $SSH_OPTIONS "$script_path" $ip:/tmp/
+    local res=0
+    ssh $SSH_OPTIONS $ip "SITE_MIRROR=$SITE_MIRROR /tmp/install_kernel_devel_node.sh" || res=1
+    ssh $SSH_OPTIONS $ip "rm -f /tmp/install_kernel_devel_node.sh"
+    return $res
+}
+
 function old_k8s_fetch_deployer() {
     local deployer_image="contrail-k8s-manifests"
     local deployer_dir="$WORKSPACE/tf-container-builder"

@@ -46,6 +46,9 @@ fi
 
 export DOMAINSUFFIX=${DOMAINSUFFIX-$(hostname -d)}
 
+if [[ -n "${SITE_MIRROR}" ]]; then
+    export SITE_MIRROR="${SITE_MIRROR}/external-web-cache"
+fi
 # deployment related environment set by any stage and put to tf_stack_profile at the end
 declare -A DEPLOYMENT_ENV=( \
     ['AUTH_PASSWORD']="$AUTH_PASSWORD" \

@@ -44,11 +44,11 @@ function build() {
 
 function k8s() {
     echo "$DISTRO detected"
-    if [[ "$DISTRO" == "centos" || "$DISTRO" == "rocky" ]]; then
-        if ! sudo yum repolist | grep -q epel ; then
-            sudo yum install -y epel-release
+    if [[ "$DISTRO" == "rocky" ]]; then
+        if ! sudo dnf repolist | grep -q epel ; then
+            sudo dnf install -y epel-release
         fi
-        sudo yum install -y jq bind-utils git
+        sudo dnf install -y jq bind-utils git wget
     elif [ "$DISTRO" == "ubuntu" ]; then
         export DEBIAN_FRONTEND=noninteractive
         sudo -E apt-get update
@@ -64,6 +64,15 @@ function k8s() {
     export K8S_SERVICE_SUBNET=$TF_SERVICE_SUBNET
     if [[ -n "$NTP_SERVERS" ]]; then
         parallel_run set_timeserver_node
+    fi
+    if [[ "$DISTRO" == "rocky" ]] && [[ -n "$AGENT_NODES" ]]; then
+        #SITE_MIRROR is an URL to the root of cache. This code will look for the files inside predefined folder
+        if [[ -n "${SITE_MIRROR}" ]]; then
+            export SITE_MIRROR="${SITE_MIRROR}/external-web-cache"
+        fi
+        for ip_addr in ${AGENT_NODES//,/ }; do
+            install_kernel_devel_node $ip_addr
+        done
     fi
     $my_dir/../common/deploy_kubespray.sh
 }
