@@ -10,13 +10,28 @@ function old_ansible_fetch_deployer() {
     sudo rm -rf "$tf_deployer_dir"
     sudo rm -rf "$openstack_deployer_dir"
     local image="$CONTAINER_REGISTRY/$deployer_image"
+    local res=1
     [ -n "$CONTRAIL_CONTAINER_TAG" ] && image+=":$CONTRAIL_CONTAINER_TAG"
-    sudo docker create --name $deployer_image --entrypoint /bin/true $image
-    sudo docker cp $deployer_image:root - | tar -x -C $WORKSPACE
-    sudo mv $WORKSPACE/root/contrail-ansible-deployer $tf_deployer_dir
-    sudo mv $WORKSPACE/root/contrail-kolla-ansible $openstack_deployer_dir
-    sudo docker rm -fv $deployer_image
+    if sudo docker create --name $deployer_image --entrypoint /bin/true $image ; then
+        if sudo docker cp $deployer_image:root - | tar -x -C $WORKSPACE ; then
+            if sudo mv $WORKSPACE/root/contrail-ansible-deployer $tf_deployer_dir ; then
+                res=0
+            fi
+            sudo mv $WORKSPACE/root/contrail-kolla-ansible $openstack_deployer_dir
+        fi
+        sudo docker rm -fv $deployer_image
+    fi
     sudo rm -rf $WORKSPACE/root
+    return $res
+}
+
+function clone_deployers() {
+    # hack to avoid error with absense of some old images
+    # mostly used for ZIU test and cause both repos don't have branch like R24.1
+    # then we have to use master
+    mkdir -p $(dirname $tf_deployer_dir) $(dirname $openstack_deployer_dir)
+    git clone https://github.com/OpenSDN-io/tf-kolla-ansible.git $openstack_deployer_dir
+    git clone https://github.com/OpenSDN-io/tf-ansible-deployer.git $tf_deployer_dir
 }
 
 function collect_logs_from_machines() {

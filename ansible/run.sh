@@ -107,7 +107,9 @@ function machines() {
     if ! fetch_deployer_no_docker $tf_deployer_image $tf_deployer_dir ; then
         echo "WARNING: failed to fetch $tf_deployer_image, try old_ansible_fetch_deployer"
         "$my_dir/../common/install_docker.sh"
-        old_ansible_fetch_deployer
+        if ! old_ansible_fetch_deployer ; then
+            clone_deployers
+        fi
     elif [[ "$ORCHESTRATOR" == "openstack" ]] ; then
         fetch_deployer_no_docker $openstack_deployer_image $openstack_deployer_dir
     fi
