@@ -33,7 +33,7 @@ openstack_deployer_image=${OPENSTACK_DEPLOYER:-"opensdn-kolla-ansible-src"}
 
 export ANSIBLE_CONFIG=$tf_deployer_dir/ansible.cfg
 
-export OPENSTACK_VERSION=${OPENSTACK_VERSION:-yoga}
+export OPENSTACK_VERSION=${OPENSTACK_VERSION:-2024.2}
 #type of kolla-ansible installation: patched (by default) or vanilla
 export KOLLA_MODE=${KOLLA_MODE:-patched}
 export AUTH_PASSWORD='contrail123'
