@@ -75,6 +75,10 @@ export CONTAINER_REGISTRY
 export NODE_IP
 export VIRTUAL_IPS
 
+if [[ -n "${SITE_MIRROR}" ]]; then
+    export SITE_MIRROR="${SITE_MIRROR}/external-web-cache"
+fi
+
 # stages
 
 # deployment related environment set by any stage and put to tf_stack_profile at the end
