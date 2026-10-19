@@ -82,7 +82,13 @@ function machines() {
     fi
 
     ansible_pkg="ansible<3"
-    if [[ ${OPENSTACK_VERSION:0:6} == '2024.2' ]]; then
+    # kolla-ansible 2026.2 needs Ansible 13-14 (ansible-core 2.20-2.21) and Python 3.12
+    if [[ ${OPENSTACK_VERSION:0:4} == '2026' ]]; then
+        ansible_pkg="ansible>=13,<15"
+    elif [[ ${OPENSTACK_VERSION:0:6} == '2025.1' ]]; then
+        # kolla-ansible 2025.1: Ansible 10-11 (ansible-core 2.17-2.18)
+        ansible_pkg="ansible>=10,<12"
+    elif [[ ${OPENSTACK_VERSION:0:6} == '2024.2' ]]; then
         ansible_pkg="ansible<10"
     elif [[ ${OPENSTACK_VERSION:0:4} == '2023' || ${OPENSTACK_VERSION:0:4} == '2024' ]]; then
         ansible_pkg="ansible<8"
@@ -90,7 +96,7 @@ function machines() {
         ansible_pkg="ansible<6"
     fi
 
-    if [[ "$DISTRO" == "ubuntu" && "$DISTRO_VERSION_ID" == "24.04" ]]; then
+    if [[ "$DISTRO" == "ubuntu" && "$DISTRO_VERSION_ID" == "24.04" && ${OPENSTACK_VERSION:0:4} != '2026' && ${OPENSTACK_VERSION:0:6} != '2025.1' ]]; then
         # it has python 3.12 which is supported in ansible >=9
         # TODO: check openstack_version and exit with error if unsupported for 24.04
         ansible_pkg="ansible>=9,<10"
@@ -100,7 +106,7 @@ function machines() {
     source $HOME/.venv/bin/activate
 
     # jinja is reqiured to create some configs
-    LANG=en_US.UTF-8 LC_ALL=en_US.UTF-8 python3 -m pip install --upgrade "$ansible_pkg" 'jinja2==3.0.3' pyopenssl requests
+    LANG=en_US.UTF-8 LC_ALL=en_US.UTF-8 python3 -m pip install --upgrade "$ansible_pkg" jinja2 pyopenssl requests
 
     set_ssh_keys
 
